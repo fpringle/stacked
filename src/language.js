@@ -218,6 +218,7 @@ const coreFunctions = {
           break;
       }
       console.log('move', direction);
+      console.log(game);
       if (direction) game.movePlayer(direction);
     },
   },
@@ -340,7 +341,6 @@ const interpret = (game, instructions, stack, functionsAvailable, debug=false) =
 
   const execOne = () => {
     if (instructions.length === 0) return;
-    game.updateStackDisplay();
     if (debug) {
       console.log('\n');
       console.log('Stack:', stack);
