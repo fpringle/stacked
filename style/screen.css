@@ -1,0 +1,10 @@
+html, body: {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+}
+
+#panes {
+  display: flex;
+  flex-direction: row
+}

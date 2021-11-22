@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>StackRogue</title>
+	<meta charset='utf8'></meta>
+
+    <link rel="shortcut icon" href="favicon.ico" />
+
+
+	<link href='//fonts.googleapis.com/css?family=Droid+Sans+Mono|Share+Tech+Mono' rel='stylesheet' type='text/css'>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="lib/codemirror-5.64.0/lib/codemirror.css">
+	<link rel="stylesheet" href="style/screen.css">
+	<script src="lib/codemirror-5.64.0/lib/codemirror.js"></script>
+	<script src="lib/codemirror-5.64.0/addon/mode/simple.js"></script>
+	<link rel="stylesheet" href="lib/codemirror-5.64.0/theme/vibrant-ink.css">
+
+	<script src="lib/rot.js"></script>
+
+	<script src="src/index.js"></script>
+	<script src="src/language.js"></script>
+	<script src="src/editor.js"></script>
+	<script src="src/game.js"></script>
+</head>
+<body>
+	<div id="container">
+	<div id="panes">
+		<noscript>
+			You must enable JavaScript.
+		</noscript>
+
+        <div id="screenPane">
+            <div id="screen"></div>
+        </div>
+
+		<div id="editorPane">
+			<textarea id="editor">
+			</textarea>
+            <div id="buttons">
+                <span><a id="executeButton" title="Run code">Run code</a></span>
+            </div>
+            <div>Stack after run: <span id="result">[ ]</span></div>
+		</div>
+        <div id="referencePane">
+            <div id="commands">
+                <ul id="command-categories"></ul>
+            </div>
+        </div>
+	</div>
+</body>
+</html>
