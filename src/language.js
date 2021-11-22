@@ -335,10 +335,14 @@ const parseIfClause = (instructions) => {
   throw new Error('could not find closing END term');
 };
 
-const interpret = (game, instructions, functionsAvailable, debug=false) => {
-  const stack = [];
-  while (instructions.length > 0) {
+const interpret = (game, instructions, stack, functionsAvailable, debug=false) => {
+  let count = 0;
+
+  const execOne = () => {
+    if (instructions.length === 0) return;
+    game.updateStackDisplay();
     if (debug) {
+      console.log('\n');
       console.log('Stack:', stack);
       console.log('Instructions:', instructions);
     }
@@ -349,10 +353,18 @@ const interpret = (game, instructions, functionsAvailable, debug=false) => {
       if (instruction.minStackSize && stack.length < instruction.minStackSize) {
         throw new Error(`tried to call ${instr} on a stack of size ${stack.length} < ${instruction.minStackSize}`);
       }
+      console.log('calling', instr);
       instruction.call(stack, instructions, game);
     } else {
       throw new Error('unknown instruction: ' + instr);
     }
-  };
-  return stack;
+    count++;
+    if (count > 1000) {
+      throw new Error('maximum program length exceeded');
+    }
+
+    setTimeout(execOne, 200);
+  }
+
+  execOne();
 };

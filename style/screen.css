@@ -6,5 +6,10 @@ html, body: {
 
 #panes {
   display: flex;
-  flex-direction: row
+  flex-direction: row;
+  margin: 10px;
+}
+
+#screenPane {
+  margin: 10px;
 }

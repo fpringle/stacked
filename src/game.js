@@ -10,15 +10,15 @@ function Player(x, y, game) {
   this.x = x;
   this.y = y;
   this.game = game;
-  this.getSymbol = () => '#';
-  this.getColor = () => 'yellow';
+  this.symbol = '#';
+  this.color = 'yellow';
   this.canMove = (direction) => {
     const [dx, dy] = DIRECTIONS[direction];
     const nx = this.x+dx;
     const ny = this.y+dy;
     if (nx < 0 || nx >= this.game.width || ny < 0 || ny >= this.game.height) return false;
     const nkey = nx + ',' + ny;
-    return this.game.map[nkey] === 'empty';
+    return !this.game.map[nkey];
   }
   this.move = (direction) => {
     if (!this.canMove(direction)) return;
@@ -29,8 +29,8 @@ function Player(x, y, game) {
     const key = this.x + ',' + this.y;
     this.x = nx;
     this.y = ny;
-    this.game.map[nkey] = 'player';
-    this.game.map[key] = 'empty';
+    this.game.map[nkey] = this;
+    this.game.map[key] = null;
   }
 };
 
@@ -47,12 +47,31 @@ Player.prototype.getPos = function() {
 };
 
 function Game(height, width, availableFunctions) {
+  this.stack = [];
   this.functions = {};
   this.display = null;
   this.height = height;
   this.width = width;
   player = null;
   this.map = {};
+  let knownObjects = {
+    block: {
+      name: 'block',
+      symbol: '@',
+      color: null,
+    },
+  };
+
+  this.placeObject = (x, y, name) => {
+    const obj = knownObjects[name];
+    if (!obj) throw new Error('No object with name ' + name);
+    const key = x + ',' + y;
+    this.map[key] = {...obj};
+  };
+
+  this.defineNewObject = (data) => {
+    knownObjects[data.name] = {...data};
+  };
 
   let canPlayerMove = false;
 
@@ -97,7 +116,7 @@ function Game(height, width, availableFunctions) {
     if (player) throw new Error('Player already set!');
     player = new Player(x, y, this);
     const key = x + ',' + y;
-    this.map[key] = 'player';
+    this.map[key] = player;
   };
 
   this.clear = () => {
@@ -126,26 +145,21 @@ function Game(height, width, availableFunctions) {
     for (let x=0; x<this.width; x++) {
       for (let y=0; y<this.height; y++) {
         const key = x + ',' + y;
-        let obj;
-        if (this.map[key] === 'player') {
-          obj = this.getPlayer();
-        } else if (this.map[key] === 'block') {
-          obj = {getSymbol: () => '@'};
-        }
+        let obj = this.map[key];
         if (obj) {
-          this.display.draw(x, y, obj.getSymbol(), obj.getColor ? obj.getColor() : null);
+          this.display.draw(x, y, obj.symbol, obj.color);
         }
       }
     }
   };
 
+  this.updateStackDisplay = () => {
+    $('#result').text('[ ' + this.stack.join(', ') + ' ]');
+  };
+
   this.refresh = () => {
     this.clear();
     this.draw();
-  };
-
-  this.placeObject = (x, y, obj) => {
-    this.map[x + ',' + y] = obj;
   };
 
   const enableKeyboardInput = () => {
@@ -182,25 +196,7 @@ function Game(height, width, availableFunctions) {
     });
 
     $('#screen').append(this.display.getContainer());
-/*
-    for (let x=0; x<this.width; x++) {
-      for (let y=0; y<this.height; y++) {
-        this.map[x+','+y] = 'empty';
-      }
-    }
-*/
 
-    for (let x=0; x<this.width; x++) {
-      for (let y=0; y<this.height; y++) {
-        if (x === 0 || y === 0 || x === this.width-1 || y === this.width-1) {
-          this.placeObject(x, y, 'block');
-        } else {
-          this.placeObject(x, y, 'empty');
-        }
-      }
-    }
-
-    this.setPlayer(10, 10);
     this.draw();
     this.updateInfoPane();
 
@@ -210,3 +206,41 @@ function Game(height, width, availableFunctions) {
   };
 }
 
+Game.createFromGrid = ({
+  grid,
+  mapping,
+  allFunctionsAvailable,
+  availableFunctions,
+  objects
+}) => {
+  const lines = grid.trim().split('\n');
+  console.log(lines);
+  const height = lines.length;
+  const width = Math.max(...lines.map(line => line.length));
+  let functions;
+  if (allFunctionsAvailable) {
+    functions = Object.keys(coreFunctions);
+  } else if (availableFunctions) {
+    functions = availableFunctions;
+  }
+  const game = new Game(height, width, functions);
+  if (objects) {
+    for (let obj of objects) {
+      game.defineNewObject(obj);
+    }
+  }
+
+  lines.forEach((line, y) => {
+    for (let x=0; x<line.length; x++) {
+      const char = line[x];
+      if (char === ' ') continue;
+      const obj = mapping[char];
+      if (!obj) throw new Error('character not known in mapping: ' + char);
+
+      if (obj === 'player') game.setPlayer(x, y);
+      else game.placeObject(x, y, obj);
+    }
+  });
+
+  return game;
+};
