@@ -4,12 +4,46 @@ html, body: {
   margin: 0;
 }
 
+body {
+  font-family: monospace;
+}
+
 #panes {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  align-content: center;
   margin: 10px;
 }
 
 #screenPane {
   margin: 10px;
 }
+
+#editorPane #buttons {
+  margin-top: 5px;
+  padding: 7px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.keys {
+  border-color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  padding: 2px;
+}
+
+#editorPane #buttons a:hover {
+  background: #fff;
+  color: #000;
+}
+/*
+#editorPane #buttons .keys {
+  background: #fff;
+  color: #000;
+  display: inline-block;
+  min-width: 15px;
+  text-align: center;
+}
+*/

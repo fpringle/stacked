@@ -1,5 +1,5 @@
-function Map(game, width, height) {
-
+function Map(_game, width, height) {
+  let game = _game;
   let player = null;
   let map = [];
   for (let row=0; row<height; row++) {
@@ -12,6 +12,13 @@ function Map(game, width, height) {
     block: {
       name: 'block',
       getSymbol: () => '@',
+    },
+    exit: {
+      name: 'exit',
+      getSymbol: () => 'X',
+      getColor: () => 'cyan',
+      passable: () => true,
+      onCollision: () => game.endLevel(),
     },
   };
 
@@ -42,7 +49,7 @@ function Map(game, width, height) {
 
   this.movePlayer = (direction) => {
     if (player) {
-        player.move(direction);
+      player.move(direction);
     }
   };
 
@@ -52,29 +59,54 @@ function Map(game, width, height) {
     const nx = x+dx;
     const ny = y+dy;
     if (nx < 0 || nx >= width || ny < 0 || ny >= height) return false;
-    return map[ny][nx] == null;
+    const obj = map[ny][nx];
+    if (!obj) return true;
+    else if (obj.passable && obj.passable(player)) return true;
+    return false;
   }
 }
 
 Map.createFromGrid = (game, {
+  height,
+  width,
+  levelName,
   grid,
   mapping,
   allFunctionsAvailable,
   availableFunctions,
   objects
-}) => {
+}, debug) => {
   const lines = grid.trim().split('\n');
-  console.log(lines);
-  const height = lines.length;
-  const width = Math.max(...lines.map(line => line.length));
+  const gheight = lines.length;
+  const gwidth = Math.max(...lines.map(line => line.length));
   let functions;
-  if (allFunctionsAvailable) {
+  if (allFunctionsAvailable || debug) {
     functions = Object.keys(coreFunctions);
   } else if (availableFunctions) {
     functions = availableFunctions;
   }
 
+  height = height || 35;
+  width = width || 35;
+
+  let paddingTop = 0;
+  let paddingLeft = 0;
+
+  if (height) {
+    const paddingVertical = Math.max(height - gheight);
+    paddingTop = Math.floor(paddingVertical / 2);
+  } else {
+    height = gheight;
+  }
+  if (width) {
+    const paddingHorizontal = Math.max(width - gwidth);
+    paddingLeft = Math.floor(paddingHorizontal / 2);
+  } else {
+    width = gwidth;
+  }
+
   game.loadFunctions(functions);
+  game.setLevelName(levelName);
 
   const map = new Map(game, width, height);
   if (objects) {
@@ -90,8 +122,8 @@ Map.createFromGrid = (game, {
       const obj = mapping[char];
       if (!obj) throw new Error('character not known in mapping: ' + char);
 
-      if (obj === 'player') map.setPlayer(x, y);
-      else map.placeObject(x, y, obj);
+      if (obj === 'player') map.setPlayer(paddingLeft+x, paddingTop+y);
+      else map.placeObject(paddingLeft+x, paddingTop+y, obj);
     }
   });
 

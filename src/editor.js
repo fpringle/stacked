@@ -13,6 +13,10 @@ function Editor(width, height) {
   internalEditor.refresh();
 
   this.getInstructions = () => {
-    return internalEditor.getValue().trim().split(/\s+/);
+    return internalEditor.getValue().trim().split(/\s+/).filter(x => !!x);
   };
+
+  $('#resetCodeButton').click(() => {
+    internalEditor.setValue('');
+  });
 };

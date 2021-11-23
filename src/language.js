@@ -218,7 +218,6 @@ const coreFunctions = {
           break;
       }
       console.log('move', direction);
-      console.log(game);
       if (direction) game.movePlayer(direction);
     },
   },
@@ -336,11 +335,10 @@ const parseIfClause = (instructions) => {
   throw new Error('could not find closing END term');
 };
 
-const interpret = (game, instructions, stack, functionsAvailable, debug=false) => {
+function* interpret (game, instructions, stack, functionsAvailable, debug=false) {
   let count = 0;
 
-  const execOne = () => {
-    if (instructions.length === 0) return;
+  while (instructions.length > 0) {
     if (debug) {
       console.log('\n');
       console.log('Stack:', stack);
@@ -355,6 +353,7 @@ const interpret = (game, instructions, stack, functionsAvailable, debug=false) =
       }
       console.log('calling', instr);
       instruction.call(stack, instructions, game);
+      if (instruction.category === 'action') yield;
     } else {
       throw new Error('unknown instruction: ' + instr);
     }
@@ -362,9 +361,5 @@ const interpret = (game, instructions, stack, functionsAvailable, debug=false) =
     if (count > 1000) {
       throw new Error('maximum program length exceeded');
     }
-
-    setTimeout(execOne, 200);
   }
-
-  execOne();
-};
+}
