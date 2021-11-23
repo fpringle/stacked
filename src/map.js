@@ -1,3 +1,6 @@
+const defaultWidth = 35;
+const defaultHeight = 35;
+
 function Map(_game, width, height) {
   let game = _game;
   let player = null;
@@ -86,8 +89,8 @@ Map.createFromGrid = (game, {
     functions = availableFunctions;
   }
 
-  height = height || 35;
-  width = width || 35;
+  height = height || defaultHeight;
+  width = width || defaultWidth;
 
   let paddingTop = 0;
   let paddingLeft = 0;

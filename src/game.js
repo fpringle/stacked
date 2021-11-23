@@ -13,19 +13,58 @@ function Game({debug, hard, firstLevel}) {
   let display = null;
   let map = null;
   let editor = null;
-  let origLevel;
+  let origMapFunc;
   let playerCanMove;
-  let drawTime;
   let levelCompleted = false;
   let levelName;
   let hardMode = hard;   // in hard mode, each program run starts with a fresh map
   let levelNum = firstLevel || 0;
   let refreshTimer;
   let hasFinished = false;
+  const executionDelay = 75;
+  const levelCompleteClearDelay = 2500;
+  const showNextLevelButtonDelay = 500;
+  const showFinishButtonDelay = 500;
+  const editorWidth = 600;
+  const editorHeight = 500;
+  const drawRandomFastTime = 500;
+  const drawRandomSlowTime = 1000;
+  const newLevelNameClearDelay = 2500;
+  const loadingLevelDelay = 750;
+  const drawLineDelay = 100;
+  const drawCharDelay = 20;
+
+  const setHardModeIndicator = () => {
+    if (hardMode) {
+      $('#hardModeIndicator').text(String.fromCharCode(0x2713));
+    } else {
+      $('#hardModeIndicator').text('x');
+    }
+  }
+
+  const toggleHardMode = () => {
+    hardMode = !hardMode;
+    setHardModeIndicator();
+  };
 
   this.ready = () => {
-    this.loadMap(levels[levelNum]);
-    this.initializeAfterMap({newMap: true, fadeIn: true});
+    setHardModeIndicator();
+    initializeBeforeMap();
+    if (debugMode) {
+      for (let i=0; i<levels.length; i++) {
+        const html = `<span><a id="level${i}Button" class="keys" title="Level ${i}">Level ${i}</a></span>`;
+        $('#levelButtons').append($(html));
+        $(`#level${i}Button`).click(() => {
+          if (i === levelNum) return;
+          reset();
+          loadMapFromLevelNum(i);
+          this.initializeAfterMap({newMap: true, drawStyle:'random-fast'});
+        });
+      }
+    }
+    reset;
+    loadMapFromLevelNum(levelNum);
+    this.initializeAfterMap({newMap: true, drawStyle:'random-slow'});
   };
 
   this.setLevelName = (name) => {
@@ -70,8 +109,8 @@ function Game({debug, hard, firstLevel}) {
   const getCharsToDraw = () => {
     const {width, height} = map.getDimensions();
     const chars = [];
-    for (let x=0; x<width; x++) {
-      for (let y=0; y<height; y++) {
+    for (let y=0; y<height; y++) {
+      for (let x=0; x<width; x++) {
         let obj = map.getObjectAt(x, y);
         if (obj) {
           const symbol = obj.getSymbol ? obj.getSymbol() : null;
@@ -97,9 +136,8 @@ function Game({debug, hard, firstLevel}) {
     }
   };
 
-  const drawFirst = () => {
+  const drawRandom = (drawTime) => {
     const chars = getCharsToDraw();
-    console.log(chars.length);
     if (chars.length === 0) return;
 
     const delay = drawTime / chars.length;
@@ -119,6 +157,41 @@ function Game({debug, hard, firstLevel}) {
 
     drawOne();
   };
+
+  const drawLines = () => {
+    const chars = getCharsToDraw();
+    if (chars.length === 0) return;
+    const player = chars.pop();
+    const lines = [[chars.shift()]];
+    for (let char of chars) {
+      if (char[1] === lines[lines.length-1][0][1]) lines[lines.length-1].push(char);
+      else lines.push([char]);
+    }
+
+    const drawLine = (line, final) => {
+      const drawOneChar = () => {
+        if (line.length === 0) {
+          if (lines.length === 0) {
+            display.draw(...player);
+          }
+          return;
+        }
+        const char = line.shift();
+        display.draw(...char);
+        setTimeout(drawOneChar, drawCharDelay);
+      }
+      drawOneChar();
+    }
+
+    const drawOneLine = () => {
+      if (lines.length === 0) return;
+      const line = lines.shift();
+      drawLine(line);
+      setTimeout(drawOneLine, drawLineDelay);
+    }
+
+    drawOneLine();
+  }
 
   const writeStatus = (text, timeout=-1) => {
     let {width, height} = map.getDimensions();
@@ -204,21 +277,19 @@ function Game({debug, hard, firstLevel}) {
   const runProgram = () => {
     if (hardMode) {
       reset();
-      this.loadMap(origLevel);
-      this.initializeAfterMap({newMap: false, fadeIn: false});
+      loadMap(origMapFunc);
+      this.initializeAfterMap({newMap: false, drawStyle:'normal'});
     }
 
     playerCanMove = true;
     const instructions = editor.getInstructions();
     const gen = interpret(this, instructions, stack, functions, debugMode);
-    const delay = 75;
     const execOne = () => {
       if (levelCompleted) return;
       const next = gen.next();
       updateStackDisplay();
-      console.log(next);
       if (next.done) return;
-      setTimeout(execOne, delay);
+      setTimeout(execOne, executionDelay);
     };
     execOne();
   }
@@ -229,28 +300,36 @@ function Game({debug, hard, firstLevel}) {
   };
 
   this.endLevel = () => {
+    // check player is at exit
+
+    const {x, y} = map.getPlayer().getXY();
+    const obj = map.getObjectAt(x, y);
+    if (!obj || obj.name !== 'exit') {
+      console.log('something\'s gone wrong (or someone\'s trying to cheat!) - ' +
+                  'Game.endLevel() was called but player isn\'t at the exit. Hmm....');
+      return;
+    }
+
     playerCanMove = false;
     levelCompleted = true;
-    console.log('Congrats');
-    writeStatus('Level completed!', 2500);
+    writeStatus(`Level ${levelNum} completed!`, levelCompleteClearDelay);
     if (levelNum + 1 < levels.length) {
       setTimeout(() => {
         $('#nextLevelButton').show();
-      }, 500);
+      }, showNextLevelButtonDelay);
     } else if (!hasFinished) {
       hasFinished = true;
       setTimeout(() => {
         $('#finishButton').show();
-      }, 500);
+      }, showFinishButtonDelay);
     }
   };
 
   const nextLevel = () => {
     $('#nextLevelButton').hide();
     reset();
-    levelNum++;
-    this.loadMap(levels[levelNum]);
-    this.initializeAfterMap({newMap: true, fadeIn: true});
+    loadMapFromLevelNum(levelNum+1);
+    this.initializeAfterMap({newMap: true, drawStyle: 'random-slow'});
   };
 
   const finish = () => {
@@ -260,75 +339,35 @@ function Game({debug, hard, firstLevel}) {
   };
 
   const pickLevel = () => {
-    functions = {...coreFunctions};
+    reset();
+    const oldHardMode = hardMode;
+    hardMode = false;
     $('#resetButton').off('click');
     $('#resetButton').click(() => {
       pickLevel();
     });
     $('#pickLevelButton').hide();
-    const {height, width} = map.getDimensions();
-    map = new Map(this, width, height);
-    const numLevels = levels.length;
-    paddingLines = Math.floor((height - numLevels) / (numLevels + 1));
-    const lineDelay = 200;
-    const charDelay = 20;
 
-    for (let idx=0; idx<levels.length; idx++) {
-      map.defineNewObject({
-        name: 'level' + idx,
-        getSymbol: () => 'O',
-        getColor: () => 'cyan',
-        passable: () => true,
-        onCollision: () => {
-          levelNum = idx;
-          disableKeyboardInput();
+    const collision = (index) => {
+      return () => {
+        levelNum = index;
+        disableKeyboardInput();
+        hardMode = oldHardMode;
+        writeStatus(`Loading level ${index}...`);
+        setTimeout(() => {
           reset();
           setupButtons();
-          this.loadMap(levels[idx]);
-          this.initializeAfterMap({newMap: true, fadeIn: true});
-        },
-      });
-    }
-
-    const linesToDraw = levels.map((level, index) => {
-      const lineNum = paddingLines + index * (paddingLines + 1);
-      map.placeObject(5, lineNum, 'level' + index);
-      return [level.levelName, lineNum];
-    });
-
-    map.setPlayer(2, 2);
-    refresh();
-
-    const drawLineFade = (text, lineNum) => {
-      const chars = text.split('');
-      let column = 10;
-      const drawChar = () => {
-        if (chars.length === 0) return;
-        const char = chars.shift();
-        map.defineNewObject({
-          name: char,
-          getSymbol: () => char,
-          passable: () => true,
-        }),
-        map.placeObject(column, lineNum, char);
-        refresh();
-        column++;
-        setTimeout(drawChar, charDelay);
-      };
-
-      drawChar();
-    };
-
-    const drawLine = () => {
-      if (linesToDraw.length === 0) {
-        enableKeyboardInput();
-        return;
+          loadMapFromLevelNum(index);
+          this.initializeAfterMap({newMap: true, drawStyle: 'random-fast'});
+        }, loadingLevelDelay);
       }
-      const [text, lineNum] = linesToDraw.shift();
-      drawLineFade(text, lineNum);
-      setTimeout(drawLine, lineDelay);
     };
-    drawLine();
+
+    reset();
+    loadMap(pickLevelMapFunc, {collision});
+    this.levelNum = -1;
+    this.initializeAfterMap({newMap: false, drawStyle: 'lines'});
+    enableKeyboardInput();
     playerCanMove = true;
   };
 
@@ -343,8 +382,8 @@ function Game({debug, hard, firstLevel}) {
     });
     $('#resetButton').click(() => {
       reset();
-      this.loadMap(origLevel);
-      this.initializeAfterMap({newMap: false, fadeIn: true});
+      loadMap(origMapFunc);
+      this.initializeAfterMap({newMap: false, drawStyle: 'random-fast'});
     });
     $('#nextLevelButton').click(() => {
       nextLevel();
@@ -355,18 +394,21 @@ function Game({debug, hard, firstLevel}) {
     $('#pickLevelButton').click(() => {
       pickLevel();
     });
+    $('#toggleHardModeButton').click(() => {
+      toggleHardMode();
+    });
 
     if (hasFinished) {
       $('#pickLevelButton').show();
     }
   };
 
-  this.initializeBeforeMap = () => {
-    editor = new Editor(600, 500);
+  const initializeBeforeMap = () => {
+    editor = new Editor(editorWidth, editorHeight);
     setupButtons();
   };
 
-  this.initializeAfterMap = ({newMap=true, fadeIn=false}) => {
+  this.initializeAfterMap = ({newMap, drawStyle}) => {
     let {width, height} = map.getDimensions();
 
     display = new ROT.Display({
@@ -377,34 +419,45 @@ function Game({debug, hard, firstLevel}) {
 
     $('#screen').append(display.getContainer());
 
-    if (newMap) {
-      drawTime = 1000;
-    }
-    else drawTime = 500;
-
     display.clear();
-    if (fadeIn) {
-      drawFirst();
-    } else {
-      draw();
-    }
+    switch (drawStyle) {
+      case 'lines':
+        drawLines();
+        break;
+      case 'random-fast':
+        drawRandom(drawRandomFastTime);
+        break;
+      case 'random-slow':
+        drawRandom(drawRandomSlowTime);
+        break;
+      case 'normal':
+        draw();
+        break;
+      default:
+        throw new Error('unknown draw style: ' + drawStyle);
+    };
 
     if (newMap) {
-      writeStatus(levelName, 2500);
+      writeStatus(levelName, newLevelNameClearDelay);
     }
 
     updateInfoPane();
     updateStackDisplay();
-    playerCanMove = false;
+    playerCanMove = true;
     levelCompleted = false;
 
     if (debugMode) enableKeyboardInput();
     display.getContainer().focus();
   };
 
-  this.loadMap = (level) => {
-    origLevel = level;
-    map = Map.createFromGrid(this, level, debugMode);
+  const loadMap = (mapFunc, extraData) => {
+    origMapFunc = mapFunc;
+    map = mapFunc(this, debugMode, extraData);
+  };
+
+  const loadMapFromLevelNum = (index, extraData) => {
+    loadMap(levels[index], extraData);
+    levelNum = index;
   };
 
   const reset = () => {

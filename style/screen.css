@@ -24,13 +24,20 @@ body {
   padding: 7px;
   background: #000;
   color: #fff;
-  cursor: pointer;
+}
+
+#screenPane #levelButtons {
+  margin-top: 5px;
+  padding: 7px;
+  background: #000;
+  color: #fff;
 }
 
 .keys {
   border-color: #fff;
   border-style: solid;
   border-width: 2px;
+  cursor: pointer;
   padding: 2px;
 }
 
@@ -38,12 +45,12 @@ body {
   background: #fff;
   color: #000;
 }
-/*
-#editorPane #buttons .keys {
+
+#screenPane #levelButtons a:hover {
   background: #fff;
   color: #000;
-  display: inline-block;
-  min-width: 15px;
-  text-align: center;
 }
-*/
+
+#hardModeIndicator {
+  font-size: 20px;
+};

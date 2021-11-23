@@ -217,7 +217,6 @@ const coreFunctions = {
           direction = 'left';
           break;
       }
-      console.log('move', direction);
       if (direction) game.movePlayer(direction);
     },
   },
@@ -227,7 +226,6 @@ const coreFunctions = {
     syntax: 'LEFT',
     minStackSize: 0,
     call: (stack, instructions, game) => {
-      console.log('move left',);
       game.movePlayer('left');
     },
   },
@@ -237,7 +235,6 @@ const coreFunctions = {
     syntax: 'UP',
     minStackSize: 0,
     call: (stack, instructions, game) => {
-      console.log('move up',);
       game.movePlayer('up');
     },
   },
@@ -247,7 +244,6 @@ const coreFunctions = {
     syntax: 'RIGHT',
     minStackSize: 0,
     call: (stack, instructions, game) => {
-      console.log('move right',);
       game.movePlayer('right');
     },
   },
@@ -257,7 +253,6 @@ const coreFunctions = {
     syntax: 'DOWN',
     minStackSize: 0,
     call: (stack, instructions, game) => {
-      console.log('move down',);
       game.movePlayer('down');
     },
   },
@@ -267,7 +262,6 @@ const coreFunctions = {
     syntax: 'WAIT',
     minStackSize: 0,
     call: (stack, instructions, game) => {
-      console.log('wait',);
       game.movePlayer('none');
     },
   },
@@ -297,11 +291,9 @@ const findEnd = (instructions) => {
       case 'DEF':
       case 'IF':
         depth++;
-//        console.log(instructions[pos], depth);
         break;
       case 'END':
         depth--;
-//        console.log(instructions[pos], depth);
         if (depth === 0) return pos;
         break;
     }
@@ -351,7 +343,7 @@ function* interpret (game, instructions, stack, functionsAvailable, debug=false)
       if (instruction.minStackSize && stack.length < instruction.minStackSize) {
         throw new Error(`tried to call ${instr} on a stack of size ${stack.length} < ${instruction.minStackSize}`);
       }
-      console.log('calling', instr);
+      if (debug) console.log('calling', instr);
       instruction.call(stack, instructions, game);
       if (instruction.category === 'action') yield;
     } else {

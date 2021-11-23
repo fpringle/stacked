@@ -1,10 +1,9 @@
 
 $(document).ready(() => {
-  window.game = new Game({
+  const game = new Game({
     debug:true,
     hard:true,
-    firstLevel: 1,
+    firstLevel: 0,
   });
-  window.game.initializeBeforeMap();
-  window.game.ready();
+  game.ready();
 });
