@@ -1,27 +1,52 @@
 html, body: {
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  width: 100%;
   margin: 0;
 }
 
 body {
   font-family: monospace;
+  background-color: #000;
+  min-height: 100%;
+  margin:0;
+  align-self: stretch;
 }
 
 #panes {
   display: flex;
   align-items: center;
   align-content: center;
+  justify-content: center;
+  padding-top: 100px;
   margin: 10px;
+}
+
+#container {
+  height: 100%;
+}
+
+#screen canvas:focus {
+  outline-width: 0;
+}
+
+.cm-linenumbers {
+  background-color: 'black';
 }
 
 #screenPane {
   margin: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  border: 2px solid white;
+}
+
+#editorPane {
+  border: 2px solid white;
 }
 
 #editorPane #buttons {
   margin-top: 5px;
-  padding: 7px;
+  padding-left: 7px;
   background: #000;
   color: #fff;
 }
@@ -54,3 +79,64 @@ body {
 #hardModeIndicator {
   font-size: 20px;
 };
+
+#referencePane {
+  height: 580px;
+}
+
+#referencePane > * {
+  color: 'white';
+}
+
+ul, li {
+  color: white;
+  padding-left: 0px;
+}
+
+.func-def {
+  display: flex;
+}
+
+.func-desc {
+  padding: 2px;
+  padding-top: 3px;
+}
+
+.func-name {
+  border-right: 1px solid white;
+  flex: 0 0 50px;
+  padding-right: 6px;
+  text-align: right;
+  padding-top: 3px;
+}
+
+#command-categories {
+  list-style-type: none;
+}
+
+.category {
+  border: 1px solid white;
+  padding: 2px;
+  padding-left: 0px;
+  padding-right: 4px;
+  margin-bottom: 4px;
+  margin-top: 8px;
+  margin-right: 4px;
+}
+
+.category-title {
+  border-bottom: 1px solid white;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 6px;
+}
+
+.func-list > :first-child > * {
+  padding-top:5px;
+}
+
+.CodeMirror {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: bold;
+}

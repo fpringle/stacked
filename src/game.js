@@ -6,7 +6,7 @@ const DIRECTIONS = {
   right: [1, 0],
 };
 
-function Game({debug, hard, firstLevel}) {
+function Game({debug, hard, firstLevel, allFuncs}) {
   let debugMode = debug;
   let stack = [];
   let functions = {};
@@ -61,6 +61,7 @@ function Game({debug, hard, firstLevel}) {
           this.initializeAfterMap({newMap: true, drawStyle:'random-fast'});
         });
       }
+      $('#levelButtons').show();
     }
     reset;
     loadMapFromLevelNum(levelNum);
@@ -95,15 +96,22 @@ function Game({debug, hard, firstLevel}) {
 
   const updateInfoPane = () => {
     const categories = getCategories();
-    let html = '';
+    $('#command-categories').empty();
     for (let [category, funcs] of Object.entries(categories)) {
-      let sublist = funcs.map(([name, desc]) => {
-        return `<li><span>${name}:</span><span>${desc}</span></li>`;
-      }).join('');
-      sublist = `${category}:<li><ul id="category-${category}">${sublist}</ul></li>`;
-      html += sublist;
+      const categoryCap = category[0].toUpperCase() + category.substr(1).toLowerCase();
+      const elem = $('<li/>').addClass('category');
+      elem.append($('<div/>').addClass('category-title').text(categoryCap));
+      const sublist = $('<ul/>').addClass('func-list');
+
+      funcs.forEach(([name, desc]) => {
+        const li = $('<li/>').addClass('func-def');
+        li.append($('<div/>').addClass('func-name').text(name));
+        li.append($('<div/>').addClass('func-desc').text(desc));
+        sublist.append(li);
+      });
+      elem.append(sublist);
+      $('#command-categories').append(elem);
     }
-    $('#command-categories').html(html);
   };
 
   const getCharsToDraw = () => {
@@ -275,23 +283,28 @@ function Game({debug, hard, firstLevel}) {
   };
 
   const runProgram = () => {
+    const run = () => {
+      playerCanMove = true;
+      const instructions = editor.getInstructions();
+      const gen = interpret(this, instructions, stack, functions, debugMode);
+      const execOne = () => {
+        if (levelCompleted) return;
+        const next = gen.next();
+        updateStackDisplay();
+        if (next.done) return;
+        setTimeout(execOne, executionDelay);
+      };
+      execOne();
+    }
+
     if (hardMode) {
       reset();
       loadMap(origMapFunc);
       this.initializeAfterMap({newMap: false, drawStyle:'normal'});
+      setTimeout(run, executionDelay);
+    } else {
+      run();
     }
-
-    playerCanMove = true;
-    const instructions = editor.getInstructions();
-    const gen = interpret(this, instructions, stack, functions, debugMode);
-    const execOne = () => {
-      if (levelCompleted) return;
-      const next = gen.next();
-      updateStackDisplay();
-      if (next.done) return;
-      setTimeout(execOne, executionDelay);
-    };
-    execOne();
   }
 
   this.loadFunctions = (availableFunctions) => {
@@ -415,6 +428,7 @@ function Game({debug, hard, firstLevel}) {
       width,
       height,
       forceSquareRatio: true,
+      fontSize: 16,
     });
 
     $('#screen').append(display.getContainer());
@@ -452,7 +466,7 @@ function Game({debug, hard, firstLevel}) {
 
   const loadMap = (mapFunc, extraData) => {
     origMapFunc = mapFunc;
-    map = mapFunc(this, debugMode, extraData);
+    map = mapFunc(this, allFuncs, extraData);
   };
 
   const loadMapFromLevelNum = (index, extraData) => {

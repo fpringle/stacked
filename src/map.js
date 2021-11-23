@@ -1,5 +1,5 @@
 const defaultWidth = 35;
-const defaultHeight = 35;
+const defaultHeight = 34;
 
 function Map(_game, width, height) {
   let game = _game;

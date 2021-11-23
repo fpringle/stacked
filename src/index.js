@@ -4,6 +4,7 @@ $(document).ready(() => {
     debug:true,
     hard:true,
     firstLevel: 0,
+    allFuncs: true,
   });
   game.ready();
 });
