@@ -11,14 +11,22 @@ const level0 = {
 @@@@@@@@@@@@@
 `,
   levelName: 'Level 0: Hello Stack',
+  comments: [
+    'In Stacked you control the character, called Hash, by writing code in a simple stack-based language.',
+    'This window is the Editor. You can use it to write commands to control your character. Anything after a \'#\' will be ignored, so you can write comments if you like.',
+    'Your program has access to a list of integers called the \'stack\', which is initially empty.',
+    'You can manipulate this stack using \'commands\' written in the Editor. If you click the \'Run Code\' button below, the commands will be executed one by one.',
+    'Using these commands you can PUSH a value to the top of the stack, POP the top value off the stack, perform numeric operations like ADD or DIV, and execute conditional statements depending on the values in the stack. You can also define your own commands, but we\'ll get to that later.',
+    'Apart from manipulating the stack, there are also commands to manipulate your character Hash. The center pane is the Map. During each level you\'ll see a 2-dimensional layout. Your character is represented by the # symbol, and your goal is to reach the X symbol.',
+    'Let\'s give it a go. For now you have access to just one command: RIGHT. If the program encounters a RIGHT command, it\'ll move Hash one space to the right. I wonder what happens if it encounters multiple RIGHT commands...'
+  ],
   mapping: {
     '@': 'block',
     '#': 'player',
     'X': 'exit',
   },
   availableFunctions: [
-    'MOVE',
-    'PUSH',
+    'RIGHT',
   ],
 };
 
@@ -47,14 +55,13 @@ const level1 = {
     'MOVE',
     'PUSH',
     'RIGHT',
-    'LEFT',
-    'UP',
-    'DOWN',
   ],
 };
 
 const makeMapFuncFromData = (data) => {
-  return (game, debug) => Map.createFromGrid(game, data, debug);
+  const mapFunc = (game, debug) => Map.createFromGrid(game, data, debug);
+  mapFunc.comments = data.comments;
+  return mapFunc;
 };
 
 const levelData = [

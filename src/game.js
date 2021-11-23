@@ -33,6 +33,8 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const loadingLevelDelay = 750;
   const drawLineDelay = 100;
   const drawCharDelay = 20;
+  const flashDelay = 500;
+  let comments = [];
 
   const setHardModeIndicator = () => {
     if (hardMode) {
@@ -56,6 +58,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
         $('#levelButtons').append($(html));
         $(`#level${i}Button`).click(() => {
           if (i === levelNum) return;
+          $('#nextLevelButton').hide();
           reset();
           loadMapFromLevelNum(i);
           this.initializeAfterMap({newMap: true, drawStyle:'random-fast'});
@@ -312,6 +315,22 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     for (let func of availableFunctions) functions[func] = coreFunctions[func];
   };
 
+  const flashHighlight = (elem, count) => {
+    const toggleOn = () => {
+      if (count === 0) return;
+      elem.addClass('highlight');
+      setTimeout(toggleOff, flashDelay);
+    }
+
+    const toggleOff = () => {
+      count--;
+      elem.removeClass('highlight');
+      setTimeout(toggleOn, flashDelay);
+    }
+
+    toggleOn(count);
+  }
+
   this.endLevel = () => {
     // check player is at exit
 
@@ -329,6 +348,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     if (levelNum + 1 < levels.length) {
       setTimeout(() => {
         $('#nextLevelButton').show();
+        flashHighlight($('#nextLevelButton'), 1);
       }, showNextLevelButtonDelay);
     } else if (!hasFinished) {
       hasFinished = true;
@@ -410,6 +430,9 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     $('#toggleHardModeButton').click(() => {
       toggleHardMode();
     });
+    $('#resetCodeButton').click(() => {
+      editor.setValue('');
+    });
 
     if (hasFinished) {
       $('#pickLevelButton').show();
@@ -453,6 +476,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
     if (newMap) {
       writeStatus(levelName, newLevelNameClearDelay);
+      if (comments) {
+        editor.setValue(comments.map(line => '# ' + line.trim() + '\n\n').join(''));
+      } else {
+        editor.setValue('');
+      }
+
     }
 
     updateInfoPane();
@@ -465,7 +494,9 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   const loadMap = (mapFunc, extraData) => {
+    playerCanMove = false;
     origMapFunc = mapFunc;
+    comments = mapFunc.comments || [];
     map = mapFunc(this, allFuncs, extraData);
   };
 

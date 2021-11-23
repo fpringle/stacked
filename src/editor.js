@@ -1,10 +1,11 @@
 
 function Editor(width, height) {
   let internalEditor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-      theme: 'vibrant-ink',
-      mode: 'stack',
-      lineNumbers: true,
-      dragDrop: false,
+    theme: 'vibrant-ink',
+    mode: 'stack',
+    lineNumbers: true,
+    dragDrop: false,
+    lineWrapping: true,
   });
 
   internalEditor.setSize(width, height);
@@ -13,10 +14,12 @@ function Editor(width, height) {
   internalEditor.refresh();
 
   this.getInstructions = () => {
-    return internalEditor.getValue().trim().split(/\s+/).filter(x => !!x);
+    const lines = internalEditor.getValue().trim().split(/\n+/);
+    const removeComments = lines.map(line => line.replace(/#.*$/, ''));
+    return removeComments.join(' ').trim().split(/\s+/).filter(x => !!x);
   };
 
-  $('#resetCodeButton').click(() => {
-    internalEditor.setValue('');
-  });
+  this.setValue = (...args) => {
+    internalEditor.setValue(...args);
+  }
 };

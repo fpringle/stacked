@@ -2,9 +2,9 @@
 $(document).ready(() => {
   const game = new Game({
     debug:true,
-    hard:true,
+//    hard:true,
     firstLevel: 0,
-    allFuncs: true,
+//    allFuncs: true,
   });
   game.ready();
 });
