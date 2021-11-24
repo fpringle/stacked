@@ -6,6 +6,8 @@ const DIRECTIONS = {
   right: [1, 0],
 };
 
+const maxLevelKey = '@stacked:maxLevelReached';
+
 function Game({debug, hard, firstLevel, allFuncs}) {
   let debugMode = debug;
   let stack = [];
@@ -391,6 +393,11 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
   const nextLevel = () => {
     $('#nextLevelButton').hide();
+
+    let curBestLevel = JSON.parse(window.localStorage.getItem(maxLevelKey)) || 0;
+    curBestLevel = Math.max(curBestLevel, levelNum+1);
+    window.localStorage.setItem(maxLevelKey, JSON.stringify(curBestLevel));
+
     reset();
     loadMapFromLevelNum(levelNum+1);
     this.initializeAfterMap({newMap: true, drawStyle: 'random-slow'});

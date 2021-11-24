@@ -12,12 +12,15 @@ window.onerror = (message, source, lineno, colno, error) => {
 };
 
 $(document).ready(() => {
+
+  const firstLevel = JSON.parse(window.localStorage.getItem(maxLevelKey)) || 0;
+
   const game = new Game({
-    debug:true,
+//    debug:true,
 //    hard:true,
-//    firstLevel: 6,
-    firstLevel: levels.length-1,
-    allFuncs: true,
+    firstLevel,
+//    firstLevel: levels.length-1,
+//    allFuncs: true,
   });
   game.ready();
 });

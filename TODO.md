@@ -1,3 +1,4 @@
+- intro
 - fix some drawing bugs e.g. loading a level while a level is already loading
 - level number indicator
 - credits (similar to level picker, go to X to click link
