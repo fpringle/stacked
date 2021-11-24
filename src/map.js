@@ -77,6 +77,7 @@ Map.createFromGrid = (game, {
   mapping,
   allFunctionsAvailable,
   availableFunctions,
+  additionalFunctions,
   objects
 }, debug) => {
   const lines = grid.trim().split('\n');
@@ -109,6 +110,7 @@ Map.createFromGrid = (game, {
   }
 
   game.loadFunctions(functions);
+  if (additionalFunctions) game.loadAdditionalFunctions(additionalFunctions);
   game.setLevelName(levelName);
 
   const map = new Map(game, width, height);

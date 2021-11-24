@@ -52,11 +52,12 @@ const coreFunctions = {
   PUSH: {
     name: 'PUSH',
     category: 'stack',
-    description: 'Push a value onto the stack.',
+    description: 'Push a single-digit number onto the stack.',
     syntax: 'PUSH <value>',
     minStackSize: 0,
     call: (stack, instructions, game) => {
       const value = instructions.shift();
+      if (value < 0 || value > 9) throw new Error('tried to push a number to the stack outside the range 0-9');
       stack.push(parseInt(value));
     },
   },
@@ -175,7 +176,7 @@ const coreFunctions = {
   // flow control
   IF: {
     category: 'flow',
-    description: 'Pop the top value off the stack. If it is non-zero, insert the given isntructions at the current location in the program. If not, and if an "else" clause is given, insert those commands instead.',
+    description: 'Pop the top value off the stack. If it is non-zero, insert the given instructions at the current location in the program. If not, and if an "else" clause is given, insert those commands instead.',
     syntax: 'IF <terms> END | IF <TERMS> ELSE <TERMS> END',
     minStackSize: 1,
     call: (stack, instructions, game) => {
@@ -345,12 +346,13 @@ function* interpret (game, instructions, stack, functionsAvailable, debug=false)
       }
       if (debug) console.log('calling', instr);
       instruction.call(stack, instructions, game);
+      game.updateStackDisplay();
       if (instruction.category === 'action') yield;
     } else {
       throw new Error('unknown instruction: ' + instr);
     }
     count++;
-    if (count > 1000) {
+    if (count > 1000000) {
       throw new Error('maximum program length exceeded');
     }
   }

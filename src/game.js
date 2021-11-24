@@ -53,8 +53,9 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     setHardModeIndicator();
     initializeBeforeMap();
     if (debugMode) {
+      $('#debugBanner').show();
       for (let i=0; i<levels.length; i++) {
-        const html = `<span><a id="level${i}Button" class="keys" title="Level ${i}">Level ${i}</a></span>`;
+        const html = `<span><a id="level${i}Button" class="keys" title="L${i}">L${i}</a></span>`;
         $('#levelButtons').append($(html));
         $(`#level${i}Button`).click(() => {
           if (i === levelNum) return;
@@ -97,10 +98,17 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     return categories;
   };
 
+  const alphabetical = (a, b) => {
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    else return 0;
+  };
+
   const updateInfoPane = () => {
-    const categories = getCategories();
+    const categories = Object.entries(getCategories());
+    categories.sort((a,b) => alphabetical(a[0], b[0]));
     $('#command-categories').empty();
-    for (let [category, funcs] of Object.entries(categories)) {
+    for (let [category, funcs] of categories) {
       const categoryCap = category[0].toUpperCase() + category.substr(1).toLowerCase();
       const elem = $('<li/>').addClass('category');
       elem.append($('<div/>').addClass('category-title').text(categoryCap));
@@ -206,7 +214,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
   const writeStatus = (text, timeout=-1) => {
     let {width, height} = map.getDimensions();
-    const padding = 2;
+    const padding = 0;
     const drawingWidth = width - 2 * padding;
     const lines = [];
     const textLines = text.split('\n');
@@ -249,7 +257,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     if (obj && obj.onCollision) obj.onCollision(player);
   }
 
-  const updateStackDisplay = () => {
+  this.updateStackDisplay = () => {
     $('#result').text('[ ' + stack.join(', ') + ' ]');
   };
 
@@ -293,7 +301,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
       const execOne = () => {
         if (levelCompleted) return;
         const next = gen.next();
-        updateStackDisplay();
         if (next.done) return;
         setTimeout(execOne, executionDelay);
       };
@@ -313,6 +320,13 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   this.loadFunctions = (availableFunctions) => {
     functions = {};
     for (let func of availableFunctions) functions[func] = coreFunctions[func];
+  };
+
+  this.loadAdditionalFunctions = (additionalFunctions) => {
+    functions = {
+      ...functions,
+      ...additionalFunctions,
+    };
   };
 
   const flashHighlight = (elem, count) => {
@@ -337,8 +351,9 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     const {x, y} = map.getPlayer().getXY();
     const obj = map.getObjectAt(x, y);
     if (!obj || obj.name !== 'exit') {
-      console.log('something\'s gone wrong (or someone\'s trying to cheat!) - ' +
-                  'Game.endLevel() was called but player isn\'t at the exit. Hmm....');
+      const errMsg = 'something\'s gone wrong (or someone\'s trying to cheat!) - Game.endLevel() was called but player isn\'t at the exit. Hmm....';
+      console.error(errMsg);
+      throw new Error(errMsg);
       return;
     }
 
@@ -476,16 +491,31 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
     if (newMap) {
       writeStatus(levelName, newLevelNameClearDelay);
-      if (comments) {
-        editor.setValue(comments.map(line => '# ' + line.trim() + '\n\n').join(''));
+      if (levelNum === 0) {
+        const text = 'WELCOME, HASH';
+        const x = (width - text.length) / 2;
+        display.drawText(x, 1, text);
+      }
+      if (comments.length > 0) {
+        editor.setValue(comments.map(line => {
+          //line = line.trim();
+          return line ? '# ' + line : line;
+        }).join('\n') + '\n\n');
       } else {
         editor.setValue('');
       }
 
     }
 
+    if (debugMode) {
+      for (let i=0; i<levels.length; i++) {
+        $(`#level${i}Button`).removeClass('highlight');
+        if (i === levelNum) $(`#level${levelNum}Button`).addClass('highlight');
+      }
+    }
+
     updateInfoPane();
-    updateStackDisplay();
+    this.updateStackDisplay();
     playerCanMove = true;
     levelCompleted = false;
 
@@ -494,6 +524,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   const loadMap = (mapFunc, extraData) => {
+    comments = [];
     playerCanMove = false;
     origMapFunc = mapFunc;
     comments = mapFunc.comments || [];
@@ -512,6 +543,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     map = null;
     display = null;
     $('#screen').empty();
-    updateStackDisplay();
+    this.updateStackDisplay();
   };
 }

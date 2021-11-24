@@ -1,0 +1,29 @@
+DEF RIGHTN
+  DUP
+  IF
+    RIGHT
+    PUSH 1
+    SUB
+    RIGHTN
+  ELSE
+    POP
+  END
+END
+
+DEF UPN
+  DUP
+  IF
+    UP
+    PUSH 1
+    SUB
+    UPN
+  ELSE
+    POP
+  END
+END
+
+DEF PUSH25
+  PUSH 5 PUSH 5 MUL
+END
+  
+PUSH25 PUSH25 RIGHTN UPN

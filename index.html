@@ -33,6 +33,9 @@
 -->
 </head>
 <body>
+    <div id="debugBanner" style="display: none">
+        Debug mode is on - make sure you don't deploy like this!
+    </div>
 	<div id="container">
 	<div id="panes">
 		<noscript>
@@ -51,7 +54,7 @@
                 <span><a id="pickLevelButton" class="keys" title="Levels" style="display: none">Levels</a></span>
                 <span><a id="nextLevelButton" class="keys" title="Next level" style="display: none">Next level</a></span>
             </div>
-            <div>Stack: <span id="result">[ ]</span></div>
+            <div id="stackDisplay">Stack: <span id="result">[ ]</span></div>
 		</div>
 
         <div id="screenPane">
@@ -64,7 +67,8 @@
                 <ul id="command-categories"></ul>
             </div>
         </div>
-
 	</div>
+    <div id="errorBanner" style="display: none">
+    </div>
 </body>
 </html>

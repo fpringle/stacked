@@ -1,7 +1,6 @@
 CodeMirror.defineSimpleMode('stack', {
   start: [
     {regex: /\d+/, token: 'number'},
-
     {regex: /(PUSH|POP|DUP|SWAP|ROT3)(?!\w)/, token:'op stackop atom'},
     {regex: /(ADD|SUB|MUL|DIV|MOD|RAND)(?!\w)/, token:'op mathop atom'},
     {regex: /(MOVE|LEFT|UP|RIGHT|DOWN|WAIT)(?!\w)/, token:'op moveop atom'},
