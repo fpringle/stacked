@@ -1,9 +1,7 @@
-- clipboard
-- github
 - credits (similar to level picker, go to X to click link
 - remember user-defined commands, give the option to paste them into the editor
 - user can click on function definitons to insert into editor?
 - sounds
 - exit conditions - stack has to look a certain way?
 - obstacles that push to or pop from the stack
-- cm mode
+- codemirror mode

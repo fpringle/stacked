@@ -2,14 +2,14 @@ html, body {
   min-height: 100%;
   width: 100%;
   margin: 0;
+  color: white;
+  font-family: monospace;
 }
 
 body {
-  font-family: monospace;
   background-color: #000;
   min-height: 100%;
   margin:0;
-  align-self: stretch;
 }
 
 #debugBanner {
@@ -34,7 +34,7 @@ body {
   align-items: center;
   align-content: center;
   justify-content: center;
-  padding-top: 160px;
+  padding-top: 120px;
   margin: 10px;
   padding-left: 15px;
 }
@@ -95,6 +95,47 @@ canvas:focus {
   color: #fff;
 }
 
+#header {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+#headerContainer {
+  display: table-cell;
+  text-align: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  font-size: 40px;
+  border-bottom: 1px solid white;
+}
+
+#headerContainer, #author {
+  font-family: monospace;
+  letter-spacing: 5px;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */ 
+}
+
+#headerTitle {
+  border-top: 1px solid white;
+  padding-top: 10px;
+}
+
+#headerRight {
+  float: right;
+}
+
+#githubButton {
+  font-size: 50px;
+}
+
+#author {
+  font-size: 15px;
+}
+
 .keys {
   border: 2px solid white;
   cursor: pointer;
@@ -123,14 +164,11 @@ canvas:focus {
 
 #hardModeIndicator {
   font-size: 20px;
-};
-
-#referencePane {
-  width: 100px;
 }
 
-#referencePane > * {
-  color: white;
+#referencePane {
+  border: 1px solid white;
+  padding-left: 10px;
 }
 
 #commands {
@@ -159,6 +197,11 @@ canvas:focus {
 ul, li {
   color: white;
   padding-left: 0px;
+}
+
+::selection {
+  background: white;
+  color: black;
 }
 
 .func-def {
