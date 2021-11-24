@@ -13,11 +13,11 @@ window.onerror = (message, source, lineno, colno, error) => {
 
 $(document).ready(() => {
   const game = new Game({
-//    debug:true,
+    debug:true,
 //    hard:true,
 //    firstLevel: 6,
     firstLevel: levels.length-1,
-//    allFuncs: true,
+    allFuncs: true,
   });
   game.ready();
 });

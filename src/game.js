@@ -77,6 +77,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     levelName = name;
   };
 
+  this.killPlayer = () => {
+    writeStatus('Hash died!');
+    playerCanMove = false;
+    setTimeout(() => reloadMap('random-fast'), 1000);
+  };
+
   this.defineNewFunction = (name, terms) => {
     functions[name] = {
       category: 'custom',
@@ -309,9 +315,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     }
 
     if (hardMode) {
-      reset();
-      loadMap(origMapFunc);
-      this.initializeAfterMap({newMap: false, drawStyle:'normal'});
+      reloadMap('normal');
       setTimeout(run, executionDelay);
     } else {
       run();
@@ -345,6 +349,17 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
     toggleOn(count);
   }
+
+  this.getPlayerXY = () => {
+    return map.getPlayer().getXY();
+  };
+
+  this.getTypeAt = (x, y) => {
+    let obj = map.getObjectAt(x, y);
+    if (obj === 'outside') return 'outside';
+    else if (!obj) return 'empty';
+    else return obj.name;
+  };
 
   this.endLevel = () => {
     // check player is at exit
@@ -421,6 +436,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     playerCanMove = true;
   };
 
+  const reloadMap = (drawStyle) => {
+    reset();
+    loadMap(origMapFunc);
+    this.initializeAfterMap({newMap: false, drawStyle});
+  };
+
   const setupButtons = () => {
     $('#resetButton').off('click');
     $('#nextLevelButton').off('click');
@@ -431,9 +452,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
       runProgram();
     });
     $('#resetButton').click(() => {
-      reset();
-      loadMap(origMapFunc);
-      this.initializeAfterMap({newMap: false, drawStyle: 'random-fast'});
+      reloadMap('random-fast');
     });
     $('#nextLevelButton').click(() => {
       nextLevel();
@@ -534,6 +553,11 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   const loadMapFromLevelNum = (index, extraData) => {
+    if (index < 6) {
+      $('#toggleHard').hide();
+    } else  {
+      $('').hide();
+    }
     loadMap(levels[index], extraData);
     levelNum = index;
   };

@@ -4,7 +4,7 @@ const level0 = {
 @           @
 @           @
 @           @
-@  #     X  @
+@  #     o  @
 @           @
 @           @
 @           @
@@ -14,7 +14,7 @@ const level0 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   availableFunctions: [
     'RIGHT',
@@ -30,7 +30,7 @@ const level0 = {
     '',
     'Using these commands you can PUSH a one-digit value to the top of the stack, POP the top value off the stack, perform numeric operations like ADD or DIV, and execute conditional statements depending on the values in the stack. You can also define your own commands, but we\'ll get to that later.',
     '',
-    'Apart from manipulating the stack, there are also commands to control your character Hash. The center pane is the Map. During each level you\'ll see a 2-dimensional layout. Your character is represented by the # symbol, and your goal is to reach the X symbol.',
+    'Apart from manipulating the stack, there are also commands to control your character Hash. The center pane is the Map. During each level you\'ll see a 2-dimensional layout. Your character is represented by the # symbol, and your goal is to reach the \'o\' symbol.',
     '',
     'Let\'s give it a go. For now you have access to just one command: RIGHT. If the program encounters a RIGHT command, it\'ll move Hash one space to the right. I wonder what happens if it encounters multiple RIGHT commands...'
   ],
@@ -43,7 +43,7 @@ const level1 = {
 @           @
 @           @
 @     @     @
-@  #  @  X  @
+@  #  @  o  @
 @     @     @
 @@@@@@@@@@@@@
 `,
@@ -51,7 +51,7 @@ const level1 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   availableFunctions: [
     'MOVE',
@@ -90,7 +90,7 @@ const level2 = {
 @@ @@@@@@@@ @@
 @@ @@@@@@@@ @@
 @@    @@    @@
-@@  # @@ X  @@
+@@  # @@ o  @@
 @@@@@@@@@@@@@@
 @@@@@@@@@@@@@@
 `,
@@ -98,7 +98,7 @@ const level2 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   allFunctionsAvailable: false,
   availableFunctions: [
@@ -130,7 +130,7 @@ const level3 = {
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @                          @
 @                          @
-@ #                      X @
+@ #                      o @
 @                          @
 @                          @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -139,7 +139,7 @@ const level3 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   allFunctionsAvailable: false,
   availableFunctions: [
@@ -184,7 +184,7 @@ const level4 = {
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @                          @
 @                          @
-@ #                      X @
+@ #                      o @
 @                          @
 @                          @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -193,7 +193,7 @@ const level4 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   allFunctionsAvailable: false,
   availableFunctions: [
@@ -238,7 +238,7 @@ const level5 = {
   grid: `
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @                            @
-@                          X @
+@                          o @
 @                            @
 @                            @
 @                            @
@@ -271,7 +271,7 @@ const level5 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   allFunctionsAvailable: false,
   availableFunctions: [
@@ -345,7 +345,7 @@ const level6 = {
 @   @   @   @   @   @   @   @
 @   @   @   @   @   @   @   @
 @       @       @       @   @
-@       @       @       @ X @
+@       @       @       @ o @
 @       @       @       @   @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `,
@@ -353,7 +353,7 @@ const level6 = {
   mapping: {
     '@': 'block',
     '#': 'player',
-    'X': 'exit',
+    'o': 'exit',
   },
   allFunctionsAvailable: false,
   availableFunctions: [
@@ -381,6 +381,62 @@ const level6 = {
   ],
   comments: [
     'Even better than RIGHTN or DOWNN, maybe someone could define a generic function MOVEN that move Hash N times in the direction D, where N and D are the top 2 values on the stack...',
+    '',
+    'By the way - until now, you\'ve been playing in \'easy mode\'. You can enter commands one at a time, and click the \'Run program\' button as many times as you want. However, if you want an extra challenge, you can click the button below to enable \'hard mode\'. Each time you click \'Run program\', the map will be reset before the program executes. In other words, your program needs to be able to get Hash from its starting position to the exit without any intervention by you.',
+  ],
+};
+
+const level7 = {
+  grid: `
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@       x      x   x    x  @
+@ x        x       x       @
+@ #   x       x       x   o@
+@ x      x      x   x      @
+@     x      x       x     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+`,
+  levelName: 'Independence',
+  mapping: {
+    '@': 'block',
+    '#': 'player',
+    'o': 'exit',
+    'x': 'spike',
+  },
+  allFunctionsAvailable: false,
+  availableFunctions: [
+    'MOVE',
+    'LEFT',
+    'UP',
+    'RIGHT',
+    'DOWN',
+    'WAIT',
+    'PUSH',
+    'DUP',
+    'POP',
+    'PUSH',
+    'SWAP',
+    'ROT3',
+    'ADD',
+    'MUL',
+    'SUB',
+    'DIV',
+    'MOD',
+    'DEF',
+    'LOOK',
+  ],
+  objects: [
+  ],
+  comments: [
+    'Look - this map has a new type of block! The red X is a spike - it\'ll kill Hash if it tries to walk over it!',
+    '',
+    'If you\'re playing in \'hard mode\', your program probably needs to be able to adapt depending on Hash\'s surroundings. Let\'s introduce some new commands to help Hash make it without relying on its all-powerful controller (you).',
+    '',
+    'The LOOK command tells you what\'s right next to you in a particular direction. First it pops a value off the stack - this is the direction Hash will look in (LOOK uses the same numbers to represent directions as MOVE). Then it pushes a new value to the stack depending on what type of object (if any) is in the space one block away from Hash in that direction.',
+    ' 0: empty cell',
+    ' 1: block',
+    ' 2: spike',
+    '-1: outside the grid limits',
   ],
 };
 
@@ -415,6 +471,7 @@ const levelData = [
   level4,
   level5,
   level6,
+  level7,
 ];
 
 const levels = levelData.map(makeMapFuncFromData);

@@ -281,6 +281,49 @@ const coreFunctions = {
       game.defineNewFunction(name, terms);
     },
   },
+
+  // environment
+  LOOK: {
+    category: 'sensing',
+    description: ('Pop a value off the stack, look at the adjacent cell corresponding to that direction (same as the MOVE command) and see what\'s there. ' +
+                  'A value will be pushed to the stack depending on the content of the adjacent cell (0 = empty, 1 = block, 2 = exit, 3 = spike, -1 = outside the grid limits).'),
+    syntax: 'LOOK',
+    minStackSize: 1,
+    call: (stack, instructions, game) => {
+      const top = stack.pop();
+      let direction;
+      switch (top) {
+        case 1:
+          direction = 'up';
+          break;
+        case 2:
+          direction = 'right';
+          break;
+        case 3:
+          direction = 'down';
+          break;
+        case 4:
+          direction = 'left';
+          break;
+      }
+      if (!direction) {
+        // TODO: throw an error or just return?
+        return;
+      }
+      const {x, y} = game.getPlayerXY();
+      const [dx, dy] = DIRECTIONS[direction];
+      const [nx, ny] = [x+dx, y+dy];
+      const typeAt = game.getTypeAt(nx, ny);
+      let pushValue;
+      if (typeAt === 'empty') pushValue = 0;
+      else if (typeAt === 'outside') pushValue = -1;
+      else if (typeAt === 'block') pushValue = 1;
+      else if (typeAt === 'exit') pushValue = 2;
+      else if (typeAt === 'spike') pushValue = 3;
+      else throw new Error(`Unknown object type at (${nx},${ny}): ${typeAt}`);
+      stack.push(pushValue);
+    },
+  },
 };
 
 // parsing functions

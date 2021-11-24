@@ -18,14 +18,22 @@ function Map(_game, width, height) {
     },
     exit: {
       name: 'exit',
-      getSymbol: () => 'X',
+      getSymbol: () => 'o',
       getColor: () => 'cyan',
       passable: () => true,
       onCollision: () => game.endLevel(),
     },
+    spike: {
+      name: 'spike',
+      getSymbol: () => 'x',
+      getColor: () => 'red',
+      passable: () => true,
+      onCollision: () => game.killPlayer(),
+    },
   };
 
   this.getObjectAt = (x, y) => {
+    if (x < 0 || x >= width || y < 0 || y >= height) return 'outside';
     return map[y][x];
   };
 
