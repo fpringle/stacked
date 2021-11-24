@@ -8,6 +8,17 @@ function Editor(width, height) {
     lineWrapping: true,
   });
 
+  let copyStatusTimer;
+
+  let clipboard = new ClipboardJS('#copyButton', {
+    text: () => {
+      if (copyStatusTimer) clearTimeout(copyStatusTimer);
+      $('#copyStatus').show();
+      copyStatusTimer = setTimeout(() => $('#copyStatus').hide(), 1500);
+      return internalEditor.getValue();
+    },
+  });
+
   internalEditor.setSize(width, height);
   internalEditor.setValue('');
 
