@@ -10,7 +10,7 @@ const level0 = {
 @           @
 @@@@@@@@@@@@@
 `,
-  levelName: 'Level 0: Hello Stack',
+  levelName: 'Hello Stack',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -47,7 +47,7 @@ const level1 = {
 @     @     @
 @@@@@@@@@@@@@
 `,
-  levelName: 'Level 1: Corners',
+  levelName: 'Corners',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -94,7 +94,7 @@ const level2 = {
 @@@@@@@@@@@@@@
 @@@@@@@@@@@@@@
 `,
-  levelName: 'Level 2: ',
+  levelName: 'Big fish, big box',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -135,7 +135,7 @@ const level3 = {
 @                          @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `,
-  levelName: 'Level 3: MathS',
+  levelName: 'MathS',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -189,7 +189,7 @@ const level4 = {
 @                          @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `,
-  levelName: 'Level 4: Independence',
+  levelName: 'Independence',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -267,7 +267,7 @@ const level5 = {
 @                            @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `,
-  levelName: 'Level 5: To if or not to if',
+  levelName: 'To if or not to if',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -349,7 +349,7 @@ const level6 = {
 @       @       @       @   @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `,
-  levelName: 'Level 6: The Snake',
+  levelName: 'The Snake',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -421,11 +421,14 @@ const levels = levelData.map(makeMapFuncFromData);
 
 
 const pickLevelMapFunc = (game, debug, {collision}) => {
+  const levelNameFirstCol = 10;
+  const levelNumberColumn = 5;
+
   const lengths = levelData.map(level=>level.levelName.length);
   const numLevels = levelData.length;
 
   const height = Math.max(defaultHeight, numLevels);
-  const width = Math.max(defaultWidth, 10+Math.max(...lengths));
+  const width = Math.max(defaultWidth, levelNameFirstCol+Math.max(...lengths));
   map = new Map(game, width, height);
 
   paddingLines = Math.floor((height - numLevels) / (numLevels + 1));
@@ -448,10 +451,10 @@ const pickLevelMapFunc = (game, debug, {collision}) => {
       passable: () => true,
       onCollision: collision(index),
     });
-    map.placeObject(5, lineNum, 'level' + index);
+    map.placeObject(levelNumberColumn, lineNum, 'level' + index);
     const text = level.levelName;
     const chars = text.split('');
-    let column = 10;
+    let column = levelNameFirstCol;
     for (let char of chars) {
       map.defineNewObject({
         name: char,

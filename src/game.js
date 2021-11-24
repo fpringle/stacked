@@ -53,6 +53,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     setHardModeIndicator();
     initializeBeforeMap();
     if (debugMode) {
+      $('#pickLevelButton').show()
       $('#debugBanner').show();
       for (let i=0; i<levels.length; i++) {
         const html = `<span><a id="level${i}Button" class="keys" title="L${i}">L${i}</a></span>`;
@@ -390,11 +391,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     reset();
     const oldHardMode = hardMode;
     hardMode = false;
+    editor.setValue('');
     $('#resetButton').off('click');
     $('#resetButton').click(() => {
       pickLevel();
     });
-    $('#pickLevelButton').hide();
+    if (!debugMode) $('#pickLevelButton').hide();
 
     const collision = (index) => {
       return () => {
@@ -413,8 +415,8 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
     reset();
     loadMap(pickLevelMapFunc, {collision});
-    this.levelNum = -1;
     this.initializeAfterMap({newMap: false, drawStyle: 'lines'});
+    this.levelNum = -1;
     enableKeyboardInput();
     playerCanMove = true;
   };
