@@ -173,9 +173,11 @@ canvas:focus {
 
 #commands {
   height: 600px;
+  overflow-y: auto;
   overflow-y: overlay;
   padding-right: 10px;
   margin-top: 0px;
+  scrollbar-color: white black;
 }
 
 ::-webkit-scrollbar {
@@ -186,11 +188,23 @@ canvas:focus {
   background: black;
 }
 
+::-moz-scrollbar-track {
+  background: black;
+}
+
 ::-webkit-scrollbar-thumb {
   background: white;
 }
 
+::-moz-scrollbar-thumb {
+  background: white;
+}
+
 ::-webkit-scrollbar-thumb:hover {
+  background: #b2b2b2;
+}
+
+::-moz-scrollbar-thumb:hover {
   background: #b2b2b2;
 }
 

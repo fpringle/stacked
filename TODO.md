@@ -1,3 +1,4 @@
+- level number indicator
 - credits (similar to level picker, go to X to click link
 - remember user-defined commands, give the option to paste them into the editor
 - user can click on function definitons to insert into editor?
