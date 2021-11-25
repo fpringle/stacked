@@ -74,6 +74,10 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     if (debugMode) {
       $('#pickLevelButton').show()
       $('#debugBanner').show();
+      $('#clearCacheButton').click(() => {
+        window.localStorage.removeItem(maxLevelKey);
+        location.reload();
+      });
       for (let i=0; i<levels.length; i++) {
         const html = `<span><a id="level${i}Button" class="keys" title="L${i}">L${i}</a></span>`;
         $('#levelButtons').append($(html));

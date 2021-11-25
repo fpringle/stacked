@@ -34,7 +34,7 @@ body {
   align-items: center;
   align-content: center;
   justify-content: center;
-  padding-top: 120px;
+  padding-top: 100px;
   margin: 10px;
   padding-left: 15px;
 }
@@ -318,4 +318,10 @@ ul, li {
   font-family: monospace;
   font-size: 13px;
   font-weight: bold;
+}
+
+#clearCacheButton:hover {
+  color: red;
+  background: black;
+  border-color: black;
 }
