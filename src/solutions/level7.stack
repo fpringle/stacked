@@ -1,10 +1,10 @@
-DEF RIGHTUNTIL  # move right until we encounter an obstacle
+DEF RIGHTUNTIL  # move right until we encounter an obstacle #
   PUSH 2
-  LOOK          # is there something one space right of us?
-  IF            # if so, do nothing
-  ELSE          # if not..
-    RIGHT       # go right
-    RIGHTUNTIL  # loop
+  LOOK          # is there something one space right of us? #
+  IF            # if so, do nothing #
+  ELSE          # if not.. #
+    RIGHT       # go right #
+    RIGHTUNTIL  # loop #
   END
 END
 

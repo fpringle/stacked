@@ -1,33 +1,33 @@
-DEF MOVEN     # [D, N] => move N times in direction D
-  DUP         # [D, N, N]
-  IF          # N>0 => [D, N]
-    SWAP      # [N, D]
-    DUP       # [N, D, D]
-    MOVE      # move in direction D => [N, D]
-    SWAP      # [D, N]
-    PUSH 1    # [D, N, 1]
-    SUB       # [D, N-1]
-    MOVEN     # recurse
-  ELSE        # N=0 => [D, 0]
-    POP       # [D]
-    POP       # []
+DEF MOVEN     # [D, N] => move N times in direction D #
+  DUP         # [D, N, N] #
+  IF          # N > 0 => [D, N] #
+    SWAP      # [N, D] #
+    DUP       # [N, D, D] #
+    MOVE      # move in direction D => [N, D] #
+    SWAP      # [D, N] #
+    PUSH 1    # [D, N, 1] #
+    SUB       # [D, N-1] #
+    MOVEN     # recurse #
+  ELSE        # N = 0 => [D, 0] #
+    POP       # [D] #
+    POP       # [] #
   END
 END
 
 DEF 25
-  PUSH 5      # [5]
-  PUSH 5      # [5, 5]
-  MUL         # [25]
+  PUSH 5      # [5] #
+  PUSH 5      # [5, 5] #
+  MUL         # [25] #
 END
 
 DEF 1LOOP
-  PUSH 3 25 MOVEN       # move 25 spaces down
-  PUSH 2 PUSH 4 MOVEN   # move 4 spaces right
-  PUSH 1 25 MOVEN       # move 25 spaces up
-  PUSH 2 PUSH 4 MOVEN   # move 4 spaces right
+  PUSH 3 25 MOVEN       # move 25 spaces down #
+  PUSH 2 PUSH 4 MOVEN   # move 4 spaces right #
+  PUSH 1 25 MOVEN       # move 25 spaces up #
+  PUSH 2 PUSH 4 MOVEN   # move 4 spaces right #
 END
 
-DEF LOOP        # do 1LOOP forever
+DEF LOOP        # do 1LOOP forever #
   1LOOP
   LOOP
 END

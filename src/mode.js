@@ -6,7 +6,6 @@ CodeMirror.defineSimpleMode('stack', {
   start: [
     {regex: /(-?\d+)/, token: 'number'},
     {regex: /#/, token: 'comment', next: 'comment'},
-    {regex: /[A-Z]+/, token: 'atom'},
     {regex: /(PUSH|POP|DUP|SWAP|ROT3)(?!\w)/, token: 'op stackop atom'},
     {regex: /(ADD|SUB|MUL|DIV|MOD|RAND)(?!\w)/, token: 'op mathop atom'},
     {regex: /(MOVE|LEFT|UP|RIGHT|DOWN|WAIT)(?!\w)/, token: 'op moveop atom'},
@@ -15,14 +14,14 @@ CodeMirror.defineSimpleMode('stack', {
     {regex: /(DEF)(?!\w)/, token: 'op customop atom', indent: true},
     {regex: /(END)(?!\w)/, token: 'op atom', dedent: true},
     {regex: /(LOOK)(?!\w)/, token: 'op senseop atom'},
+    {regex: /[a-zA-Z]+\d+/, token: null},
+    {regex: /[A-Z]+/, token: 'atom'},
   ],
   comment: [
     {regex: /#/, token: 'comment', next: 'start'},
     {regex: /Hash/, token: 'variable'},
     {regex: /(\Wred )(\w+)/, token: ['comment', 'string-2']},
     {regex: /[\[\]]/, token: 'string-2'},
-    {regex: /[B-HJ-Z](?=\W)/, token: 'atom'},
-    {regex: /[A-Z]{2,}(?=\W)/, token: 'atom'},
 //    {regex: /(")(o)(")/, token: ['string', 'def', 'string']},
     {regex: /"([^"]+)"/, token: 'string'},
     {regex: /[a-zA-Z]+\d+/, token: null},
@@ -36,6 +35,8 @@ CodeMirror.defineSimpleMode('stack', {
     {regex: /(DEF)/, token: 'op customop atom'},
     {regex: /(END)(?!\w)/, token: 'op atom'},
     {regex: /(LOOK)(?!\w)/, token: 'op senseop atom'},
+    {regex: /[B-HJ-Z](?=\W)/, token: 'atom'},
+    {regex: /[A-Z]{2,}(?=\W)/, token: 'atom'},
     {regex: /./, token: 'comment'},
   ],
   meta: {

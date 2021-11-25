@@ -26,7 +26,15 @@ function Editor(width, height) {
   internalEditor.refresh();
 
   this.getInstructions = () => {
-    const lines = internalEditor.getValue().trim().split(/\n+/);
+    let allTokens = '';
+    const numLines = internalEditor.lineCount();
+    for (let line = 0; line < numLines; line++) {
+      internalEditor.getLineTokens(line, true).forEach(({string, state}) => {
+        if (state.state !== 'comment') allTokens += string;
+      });
+      allTokens += '\n';
+    }
+    const lines = allTokens.trim().split(/\n+/);
     const removeComments = lines.map(line => line.replace(/#.*$/, ''));
     return removeComments.join(' ').trim().split(/\s+/).filter(x => !!x);
   };

@@ -423,6 +423,7 @@ const level7 = {
     'DIV',
     'MOD',
     'DEF',
+    'IF',
     'LOOK',
   ],
   objects: [
