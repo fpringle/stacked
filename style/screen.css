@@ -1,6 +1,6 @@
 html, body {
   min-height: 100%;
-  width: 100%;
+  max-width: 100%;
   margin: 0;
   color: white;
   font-family: monospace;
@@ -31,6 +31,7 @@ body {
 
 #panes {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   align-content: center;
   justify-content: center;
@@ -40,7 +41,11 @@ body {
 }
 
 #container {
-  height: 100%;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+
 }
 
 .CodeMirror-linenumbers {
@@ -72,6 +77,8 @@ body {
   margin-right: 20px;
   padding-bottom: 10px;
   border: 2px solid white;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 canvas:focus {
@@ -84,6 +91,8 @@ canvas:focus {
 
 #editorPane {
   border: 2px solid white;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 #topButtons {
@@ -213,6 +222,8 @@ canvas:focus {
 }
 
 #referencePane {
+  flex-shrink: 1;
+/*  flex-grow: 1;*/
   border: 1px solid white;
   padding-left: 10px;
 }
