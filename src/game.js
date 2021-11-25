@@ -141,7 +141,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
       funcs.forEach(([name, desc]) => {
         const li = $('<li/>').addClass('func-def');
-        li.append($('<div/>').addClass('func-name').addClass('cm-atom').text(name));
+        const div = $('<div/>').addClass('func-name').addClass('cm-atom').text(name);
+        div.click(() => {
+          editor.insert(name);
+          editor.focus();
+        });
+        li.append(div);
         li.append($('<div/>').addClass('func-desc').text(desc));
         sublist.append(li);
       });

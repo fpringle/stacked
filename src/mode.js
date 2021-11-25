@@ -15,7 +15,6 @@ CodeMirror.defineSimpleMode('stack', {
     {regex: /(END)(?!\w)/, token: 'op atom', dedent: true},
     {regex: /(LOOK)(?!\w)/, token: 'op senseop atom'},
     {regex: /[a-zA-Z]+\d+/, token: null},
-    {regex: /[A-Z]+/, token: 'atom'},
   ],
   comment: [
     {regex: /#/, token: 'comment', next: 'start'},
