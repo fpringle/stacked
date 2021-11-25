@@ -176,6 +176,8 @@ const level3 = {
     'Who can be bothered to type out RIGHT 23 times?? For this level ONLY, you have access to the function RIGHTN. It\'ll pop the top value off the top of the stack and move right that many times.',
     '',
     'But wait - you can only PUSH single-digit values to the stack, so you can\'t just do "PUSH 23 RIGHTN". Maybe we can solve this using mathematical commands like ADD and MUL...',
+    '',
+    'In case you forget what your stack is supposed to look like, you can take a look at the display right below the map. Next to it you can also see how many instructions your program has executed. Why don\'t you see how low you can get that number?',
   ],
 };
 
@@ -214,6 +216,7 @@ const level4 = {
     'SUB',
     'DIV',
     'MOD',
+    'RAND',
     'DEF',
   ],
   objects: [
@@ -292,6 +295,7 @@ const level5 = {
     'SUB',
     'DIV',
     'MOD',
+    'RAND',
     'DEF',
     'IF',
   ],
@@ -374,6 +378,7 @@ const level6 = {
     'SUB',
     'DIV',
     'MOD',
+    'RAND',
     'DEF',
     'IF',
   ],
@@ -422,6 +427,7 @@ const level7 = {
     'SUB',
     'DIV',
     'MOD',
+    'RAND',
     'DEF',
     'IF',
     'LOOK',

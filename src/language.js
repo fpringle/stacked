@@ -168,7 +168,7 @@ const coreFunctions = {
       const mx = stack.pop();
       const mn = stack.pop();
       if (mx <= mn) throw new Error('tried to call RAND with max <= min');
-      const val = Math.floor(Math.random() * (mx - mn));
+      const val = mn + Math.floor(Math.random() * (mx - mn));
       stack.push(val);
     },
   },
@@ -390,6 +390,7 @@ function* interpret (game, instructions, stack, functionsAvailable, debug=false)
       if (debug) console.log('calling', instr);
       instruction.call(stack, instructions, game);
       game.updateStackDisplay();
+      game.incrementExecutionSteps();
       if (instruction.category === 'action') yield;
     } else {
       throw new Error('unknown instruction: ' + instr);

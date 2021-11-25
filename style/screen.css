@@ -47,11 +47,19 @@ body {
   background: black;
 }
 
-#stackDisplay {
+#stackDisplay,#executionSteps {
   color: white;
-  padding: 10px;
   font-size: 14px;
   font-weight: bold;
+  display: table-cell;
+}
+
+#stackDisplay {
+  width: 350px;
+}
+
+#executionSteps {
+  width: 200px;
 }
 
 #screenPane {
@@ -81,7 +89,7 @@ canvas:focus {
 
 #buttons {
   border-top: 1px solid white;
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 #editorPane #buttons,#topButtons {
@@ -97,6 +105,14 @@ canvas:focus {
   padding: 7px;
   background: #000;
   color: #fff;
+}
+
+#belowScreen {
+  display: table;
+  padding: 2px;
+  table-layout: fixed;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #header {

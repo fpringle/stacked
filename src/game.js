@@ -46,6 +46,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const drawCharDelay = 20;
   const flashDelay = 500;
   let comments = [];
+  let executionSteps;
 
   const setHardModeIndicator = () => {
     if (hardMode) {
@@ -282,7 +283,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   }
 
   this.updateStackDisplay = () => {
-    $('#result').text('[ ' + stack.join(', ') + ' ]');
+    let shortenedStack = stack.slice();
+    if (shortenedStack.length > 5) {
+      shortenedStack = shortenedStack.slice(shortenedStack.length - 4);
+      shortenedStack.unshift('...');
+    }
+    $('#result').text('[ ' + shortenedStack.join(', ') + ' ]');
   };
 
   const refresh = () => {
@@ -578,8 +584,19 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     display.getContainer().focus();
   };
 
+  const updateExecutionStepsIndicator = () => {
+    $('#steps').text(''+executionSteps);
+  };
+
+  this.incrementExecutionSteps = () => {
+    executionSteps++;
+    updateExecutionStepsIndicator();
+  };
+
   const loadMap = (mapFunc, extraData) => {
     comments = [];
+    executionSteps = 0;
+    updateExecutionStepsIndicator();
     playerCanMove = false;
     origMapFunc = mapFunc;
     comments = mapFunc.comments || [];
