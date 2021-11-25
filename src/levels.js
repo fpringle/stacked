@@ -477,8 +477,7 @@ const levelData = [
 
 const levels = levelData.map(makeMapFuncFromData);
 
-
-const pickLevelMapFunc = (game, debug, {collision}) => {
+function pickLevelMapFunc (game, debug, {collision}) {
   const levelNameFirstCol = 10;
   const levelNumberColumn = 5;
 
@@ -526,3 +525,12 @@ const pickLevelMapFunc = (game, debug, {collision}) => {
 
   return map;
 };
+
+pickLevelMapFunc.comments = [
+  'Congratulations on finishing Stacked!',
+  'If you like, you can now pick any of the levels to play again. Simply navigate Hash to one of the blue level numbers to load that level. As a treat, for this level only you can use the arrow keys to move around. If you were playing in "easy mode" before, maybe you want to try your hand at "hard mode"!',
+  '',
+  'Stacked was written by Freddy Pringle. To check out the GitHub repo, click the icon at the top right of the page. You\'re more than welcome to fork the repo, run the game locally, make changes or design your own levels, and submit merge requests.',
+  '',
+  'For the inspiration for Stacked, full credit goes to Alex Nisnevich and Greg Shuflin for their awesome game Untrusted. The readme on Stacked\'s repo has links to their pages and to Untrusted, which I strongly recommend you try.',
+];

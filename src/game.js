@@ -8,6 +8,15 @@ const DIRECTIONS = {
 
 const maxLevelKey = '@stacked:maxLevelReached';
 
+const flashError = (message) => {
+  $('#errorBanner').text(message);
+  $('#errorBanner').show();
+  setTimeout(() => {
+    $('#errorBanner').empty();
+    $('#errorBanner').hide();
+  }, 5000);
+};
+
 function Game({debug, hard, firstLevel, allFuncs}) {
   let debugMode = debug;
   let stack = [];
@@ -49,6 +58,12 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const toggleHardMode = () => {
     hardMode = !hardMode;
     setHardModeIndicator();
+  };
+
+  const handleError = (err) => {
+    const message = err.message[0].toUpperCase() + err.message.substr(1);
+    console.error('Error: ' + message);
+    flashError(message);
   };
 
   this.ready = () => {
@@ -314,13 +329,21 @@ function Game({debug, hard, firstLevel, allFuncs}) {
         setTimeout(execOne, executionDelay);
       };
       execOne();
-    }
+    };
+
+    const runAndCatch = () => {
+      try {
+        run();
+      } catch (err) {
+        handleError(err);
+      }
+    };
 
     if (hardMode) {
       reloadMap('normal');
-      setTimeout(run, executionDelay);
+      setTimeout(runAndCatch, executionDelay);
     } else {
-      run();
+      runAndCatch();
     }
   }
 
@@ -414,6 +437,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     const oldHardMode = hardMode;
     hardMode = false;
     editor.setValue('');
+    $('#levelIndicator').text('Pick level');
     $('#resetButton').off('click');
     $('#resetButton').click(() => {
       pickLevel();
@@ -438,9 +462,11 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     reset();
     loadMap(pickLevelMapFunc, {collision});
     this.initializeAfterMap({newMap: false, drawStyle: 'lines'});
+    insertComments();
     this.levelNum = -1;
     enableKeyboardInput();
     playerCanMove = true;
+    $('#screen canvas').focus();
   };
 
   const reloadMap = (drawStyle) => {
@@ -487,6 +513,10 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     setupButtons();
   };
 
+  const insertComments = () => {
+    editor.setValue('#\n' + comments.join('\n') + '\n#\n\n');
+  };
+
   this.initializeAfterMap = ({newMap, drawStyle}) => {
     let {width, height} = map.getDimensions();
 
@@ -525,13 +555,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
         display.drawText(x, 1, text);
       }
       if (comments.length > 0) {
-        editor.setValue('#\n' + comments.join('\n') + '\n#\n\n');
-  /*
-        editor.setValue(comments.map(line => {
-          //line = line.trim();
-          return line ? '# ' + line + ' #' : line;
-        }).join('\n') + '\n\n');
-  */
+        insertComments();
       } else {
         editor.setValue('');
       }
@@ -564,12 +588,13 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
   const loadMapFromLevelNum = (index, extraData) => {
     if (index < 6) {
-      $('#toggleHard').hide();
+      $('#toggleHardModeButton').hide();
     } else  {
-      $('').hide();
+      $('#toggleHardModeButton').show();
     }
     loadMap(levels[index], extraData);
     levelNum = index;
+    $('#levelIndicator').text('Level ' + levelNum);
   };
 
   const reset = () => {

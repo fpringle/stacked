@@ -37,6 +37,7 @@ CodeMirror.defineSimpleMode('stack', {
     {regex: /(LOOK)(?!\w)/, token: 'op senseop atom'},
     {regex: /[B-HJ-Z](?=\W)/, token: 'atom'},
     {regex: /[A-Z]{2,}(?=\W)/, token: 'atom'},
+    {regex: /(Freddy Pringle|Alex Nisnevich|Greg Shuflin)/, token: 'keyword'},
     {regex: /./, token: 'comment'},
   ],
   meta: {

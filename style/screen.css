@@ -66,6 +66,10 @@ canvas:focus {
   outline: none;
 }
 
+#levelIndicator {
+  padding: 5px;
+}
+
 #editorPane {
   border: 2px solid white;
 }
@@ -113,10 +117,6 @@ canvas:focus {
 #headerContainer, #author {
   font-family: monospace;
   letter-spacing: 5px;
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */ 
 }
 
 #headerTitle {
@@ -134,6 +134,13 @@ canvas:focus {
 
 #author {
   font-size: 15px;
+}
+
+.noselect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .keys {
@@ -261,6 +268,10 @@ ul, li {
 
 .func-list > :first-child > * {
   padding-top:5px;
+}
+
+.func-list > :last-child > * {
+  padding-bottom:5px;
 }
 
 .CodeMirror {
