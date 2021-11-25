@@ -120,6 +120,10 @@ canvas:focus {
   color: #fff;
 }
 
+#levelButtons span {
+  margin-left: 0.3125rem;
+}
+
 #belowScreen {
   display: table;
   padding: 0.125rem;
@@ -229,7 +233,7 @@ canvas:focus {
 }
 
 #commands {
-  height: 37.5rem;
+  height: 45rem;
   width: 36.625rem;
   overflow-y: auto;
   overflow-y: overlay;

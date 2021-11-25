@@ -30,6 +30,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   let levelName;
   let hardMode = hard;   // in hard mode, each program run starts with a fresh map
   let levelNum = firstLevel || 0;
+  let curBestLevel = levelNum;
   let refreshTimer;
   let hasFinished = false;
   const executionDelay = 75;
@@ -78,19 +79,8 @@ function Game({debug, hard, firstLevel, allFuncs}) {
         window.localStorage.removeItem(maxLevelKey);
         location.reload();
       });
-      for (let i=0; i<levels.length; i++) {
-        const html = `<span><a id="level${i}Button" class="keys" title="L${i}">L${i}</a></span>`;
-        $('#levelButtons').append($(html));
-        $(`#level${i}Button`).click(() => {
-          if (i === levelNum) return;
-          $('#nextLevelButton').hide();
-          reset();
-          loadMapFromLevelNum(i);
-          this.initializeAfterMap({newMap: true, drawStyle:'random-fast'});
-        });
-      }
-      $('#levelButtons').show();
     }
+
     reset();
     if (levelNum === -1) {
       intro();
@@ -454,8 +444,8 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const nextLevel = () => {
     $('#nextLevelButton').hide();
 
-    let curBestLevel = JSON.parse(window.localStorage.getItem(maxLevelKey)) || 0;
-    curBestLevel = Math.max(curBestLevel, levelNum+1);
+    let _curBestLevel = JSON.parse(window.localStorage.getItem(maxLevelKey)) || 0;
+    curBestLevel = Math.max(_curBestLevel, levelNum+1, curBestLevel);
     window.localStorage.setItem(maxLevelKey, JSON.stringify(curBestLevel));
 
     reset();
@@ -520,6 +510,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
             $('#editorPane').show();
             $('#referencePane').show();
             $('#belowScreen').show();
+            $('#levelButtons').show();
             reset();
             loadMapFromLevelNum(0);
             this.initializeAfterMap({newMap: true, drawStyle: 'random-slow'});
@@ -545,7 +536,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     $('#resetButton').click(() => {
       pickLevel();
     });
-    if (!debugMode) $('#pickLevelButton').hide();
+    //if (!debugMode) $('#pickLevelButton').hide();
 
     const collision = (index) => {
       return () => {
@@ -672,6 +663,20 @@ function Game({debug, hard, firstLevel, allFuncs}) {
       }
     }
 
+    const maxLevelAvailable = Math.max(0, debugMode ? levels.length - 1 : curBestLevel);
+    $('#levelButtons').empty();
+    for (let i=0; i<=maxLevelAvailable; i++) {
+      const html = `<span><a id="level${i}Button" class="keys" title="L${i}">L${i}</a></span>`;
+      $('#levelButtons').append($(html));
+      $(`#level${i}Button`).click(() => {
+        if (i === levelNum) return;
+        $('#nextLevelButton').hide();
+        reset();
+        loadMapFromLevelNum(i);
+        this.initializeAfterMap({newMap: true, drawStyle:'random-fast'});
+      });
+    }
+
     updateInfoPane();
     this.updateStackDisplay();
     playerCanMove = true;
@@ -702,7 +707,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   const loadMapFromLevelNum = (index, extraData) => {
-    if (index < 6) {
+    if (curBestLevel < 6 && index < 6) {
       $('#toggleHardModeButton').hide();
     } else  {
       $('#toggleHardModeButton').show();
