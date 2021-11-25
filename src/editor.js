@@ -6,6 +6,7 @@ function Editor(width, height) {
     lineNumbers: true,
     dragDrop: false,
     lineWrapping: true,
+    tabSize: 2,
   });
 
   let copyStatusTimer;

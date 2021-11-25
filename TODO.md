@@ -7,4 +7,3 @@
 - sounds
 - exit conditions - stack has to look a certain way?
 - obstacles that push to or pop from the stack
-- codemirror mode

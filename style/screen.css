@@ -235,6 +235,7 @@ ul, li {
   padding-right: 6px;
   text-align: right;
   padding-top: 3px;
+  font-weight: bold;
 }
 
 #command-categories {

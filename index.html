@@ -12,7 +12,6 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 	<link rel="stylesheet" href="lib/codemirror-5.64.0/lib/codemirror.css">
-	<link rel="stylesheet" href="style/screen.css">
 	<script src="lib/codemirror-5.64.0/lib/codemirror.js"></script>
 	<script src="lib/codemirror-5.64.0/addon/mode/simple.js"></script>
 	<link rel="stylesheet" href="lib/codemirror-5.64.0/theme/vibrant-ink.css">
@@ -20,8 +19,10 @@
 	<script src="lib/rot.js"></script>
     <script src="lib/clipboard.min.js"></script>
 
-    <script src="src/mode.js"></script>
+	<link rel="stylesheet" href="style/screen.css">
+	<link rel="stylesheet" href="style/editor.css">
 
+    <script src="src/mode.js"></script>
 	<script src="src/language.js"></script>
 	<script src="src/editor.js"></script>
 	<script src="src/map.js"></script>
@@ -85,7 +86,7 @@
 
         <div id="referencePane">
             <div id="commands">
-                <ul id="command-categories"></ul>
+                <ul id="command-categories" class="cm-s-vibrant-ink"></ul>
             </div>
         </div>
 	</div>

@@ -125,7 +125,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
       funcs.forEach(([name, desc]) => {
         const li = $('<li/>').addClass('func-def');
-        li.append($('<div/>').addClass('func-name').text(name));
+        li.append($('<div/>').addClass('func-name').addClass('cm-atom').text(name));
         li.append($('<div/>').addClass('func-desc').text(desc));
         sublist.append(li);
       });
@@ -518,17 +518,20 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     };
 
     if (newMap) {
-      writeStatus(levelName, newLevelNameClearDelay);
+      writeStatus(levelNum + '. ' + levelName, newLevelNameClearDelay);
       if (levelNum === 0) {
         const text = 'WELCOME, HASH';
         const x = (width - text.length) / 2;
         display.drawText(x, 1, text);
       }
       if (comments.length > 0) {
+        editor.setValue('#\n' + comments.join('\n') + '\n#\n\n');
+  /*
         editor.setValue(comments.map(line => {
           //line = line.trim();
-          return line ? '# ' + line : line;
+          return line ? '# ' + line + ' #' : line;
         }).join('\n') + '\n\n');
+  */
       } else {
         editor.setValue('');
       }

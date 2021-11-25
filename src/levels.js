@@ -22,15 +22,15 @@ const level0 = {
   comments: [
     'In Stacked you control the character, called Hash, by writing code in a simple stack-based language.',
     '',
-    'This window is the Editor. You can use it to write commands to control your character. Anything after a \'#\' will be ignored, so you can write comments if you like.',
+    'This window is the Editor. You can use it to write commands to control your character. Anything between a pair of "#"s will be ignored, so you can write comments if you like.',
     '',
-    'Your program has access to a list of integers called the \'stack\', which is initially empty.',
+    'Your program has access to a list of integers called the "stack", which is initially empty.',
     '',
-    'You can manipulate this stack using \'commands\' written in the Editor. If you click the \'Run Code\' button below, the commands will be executed one by one.',
+    'You can manipulate this stack using "commands" written in the Editor. If you click the "Run Code" button below, the commands will be executed one by one.',
     '',
     'Using these commands you can PUSH a one-digit value to the top of the stack, POP the top value off the stack, perform numeric operations like ADD or DIV, and execute conditional statements depending on the values in the stack. You can also define your own commands, but we\'ll get to that later.',
     '',
-    'Apart from manipulating the stack, there are also commands to control your character Hash. The center pane is the Map. During each level you\'ll see a 2-dimensional layout. Your character is represented by the # symbol, and your goal is to reach the \'o\' symbol.',
+    'Apart from manipulating the stack, there are also commands to control your character Hash. The center pane is the Map. During each level you\'ll see a 2-dimensional layout. Your character is represented by the "#" symbol, and your goal is to reach the "o" symbol.',
     '',
     'Let\'s give it a go. For now you have access to just one command: RIGHT. If the program encounters a RIGHT command, it\'ll move Hash one space to the right. I wonder what happens if it encounters multiple RIGHT commands...'
   ],
@@ -78,7 +78,7 @@ const level1 = {
     'After MOVE, the value 1 gets popped off the stack, the character moves upwards, and the stack is [2].',
     'After MOVE, the value 2 gets popped off the stack, the character moves right, and stack is empty again, [].',
     '',
-    'By the way - if you mess up, you can reset the Map by clicking \'Reset map\' below, and you can reset the Editor by clicking \'Clear editor\'.',
+    'By the way - if you mess up, you can reset the Map by clicking "Reset map" below, and you can reset the Editor by clicking "Clear editor".',
   ],
 };
 
@@ -175,7 +175,7 @@ const level3 = {
   comments: [
     'Who can be bothered to type out RIGHT 23 times?? For this level ONLY, you have access to the function RIGHTN. It\'ll pop the top value off the top of the stack and move right that many times.',
     '',
-    'But wait - you can only PUSH single-digit values to the stack, so you can\'t just do \'PUSH 23 RIGHTN\'. Maybe we can solve this using mathematical commands like ADD and MUL...',
+    'But wait - you can only PUSH single-digit values to the stack, so you can\'t just do "PUSH 23 RIGHTN". Maybe we can solve this using mathematical commands like ADD and MUL...',
   ],
 };
 
@@ -221,7 +221,7 @@ const level4 = {
   comments: [
     'At the moment the program simply executes the commands that you type in, one-by-one. That\'s great, but it gets tedious when navigating more complicated maps. By defining your own commands, you can simulate more advanced programming concepts like loops and recursion.',
     '',
-    'The DEF commands lets you define your own function. When the program encounters the DEF command, first it reads the immediate next word - that\'s the name of the function. It\'ll then read all the commands up to the corresponding END command. The program saves the series of commands under the name supplied, and from then on whenever it encounters that name it\'ll replace it with the function body.',
+    'The "DEF" command lets you define your own function. When the program encounters the "DEF" command, first it reads the immediate next word - that\'s the name of the function. It\'ll then read all the commands up to the corresponding "END" command. The program saves the series of commands under the name supplied, and from then on whenever it encounters that name it\'ll replace it with the function body.',
     '',
     'For example, let\'s define a simple new command RIGHT2 that moves the character 2 places to the right.',
     '',
@@ -230,7 +230,7 @@ const level4 = {
     'END               - we end the function definition',
     'RIGHT2            - we call the function',
     '',
-    'A function defined with DEF can also call itself! For example, can you write your own function that moves right infinitely?',
+    'A function defined with "DEF" can also call itself! For example, can you write your own function that moves right indefinitely?',
   ],
 };
 
@@ -300,17 +300,17 @@ const level5 = {
   comments: [
     'Now that you have a grasp of the core functions, let\'s get a bit more advanced. Hash\'s survival depends on it!',
     '',
-    'The IF command executes code conditionally, based on the value on top of the stack. If the value it pops off the stack is non-zero (positive or negative), it will execute the following code. There\'s also the option to provide an ELSE clause, which will be executed if the value popped off the stack is zero.',
+    'The IF command executes code conditionally, based on the value on top of the stack. If the value it pops off the stack is non-0 (positive or negative), it will execute the following code. There\'s also the option to provide an ELSE clause, which will be executed if the value popped off the stack is 0.',
     '',
     'The syntax for the IF command is as follows:',
     'IF       - pop the top value off the stack',
-    '  CMD1   - if the value is non-zero, execute these commands',
+    '  CMD1   - if the value is non-0, execute these commands',
     '  CMD2',
     'ELSE     - this is optional',
     '  CMD3   - if the value is 0, execute these commands',
     'END      - this is required',
     '',
-    'For example, by maintaining a \'counter\' value on the top of the stack, we can repeatedly execute a series of comands, perhaps modifying the count to halt when a certain condition is reached. Remember that the IF command will POP the value off the stack and discard it, so if you want to keep the value you\'ll have to use DUP first.',
+    'For example, by maintaining a "counter" value on the top of the stack, we can repeatedly execute a series of comands, perhaps modifying the count to halt when a certain condition is reached. Remember that the IF command will POP the value off the stack and discard it, so if you want to keep the value you\'ll have to use DUP first.',
     '',
     'Now you try it! I wonder if you can define functions RIGHTN and UPN that move Hash to the right/up N times, where N is the top value on the stack.',
   ],
@@ -382,7 +382,7 @@ const level6 = {
   comments: [
     'Even better than RIGHTN or DOWNN, maybe someone could define a generic function MOVEN that move Hash N times in the direction D, where N and D are the top 2 values on the stack...',
     '',
-    'By the way - until now, you\'ve been playing in \'easy mode\'. You can enter commands one at a time, and click the \'Run program\' button as many times as you want. However, if you want an extra challenge, you can click the button below to enable \'hard mode\'. Each time you click \'Run program\', the map will be reset before the program executes. In other words, your program needs to be able to get Hash from its starting position to the exit without any intervention by you.',
+    'By the way - until now, you\'ve been playing in "easy mode". You can enter commands one at a time, and click the "Run program" button as many times as you want. However, if you want an extra challenge, you can click the button below to enable "hard mode". Each time you click "Run program", the map will be reset before the program executes. In other words, your program needs to be able to get Hash from its starting position to the exit without any intervention by you.',
   ],
 };
 
@@ -396,7 +396,7 @@ const level7 = {
 @     x      x       x     @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `,
-  levelName: 'Independence',
+  levelName: 'Look out for yourself',
   mapping: {
     '@': 'block',
     '#': 'player',
@@ -430,7 +430,7 @@ const level7 = {
   comments: [
     'Look - this map has a new type of block! The red X is a spike - it\'ll kill Hash if it tries to walk over it!',
     '',
-    'If you\'re playing in \'hard mode\', your program probably needs to be able to adapt depending on Hash\'s surroundings. Let\'s introduce some new commands to help Hash make it without relying on its all-powerful controller (you).',
+    'If you\'re playing in "hard mode", your program probably needs to be able to adapt depending on Hash\'s surroundings. Let\'s introduce some new commands to help Hash make it without relying on its all-powerful controller (you).',
     '',
     'The LOOK command tells you what\'s right next to you in a particular direction. First it pops a value off the stack - this is the direction Hash will look in (LOOK uses the same numbers to represent directions as MOVE). Then it pushes a new value to the stack depending on what type of object (if any) is in the space one block away from Hash in that direction.',
     ' 0: empty cell',
