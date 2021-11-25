@@ -304,14 +304,25 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     $('#result').text('[ ' + shortenedStack.join(', ') + ' ]');
   };
 
-  const refresh = () => {
+  const refresh = (drawGridLines=true) => {
+
     if (map && dontErase.length > 0) {
-      const {width, height} = map.getDimensions()
+      const {width, height} = map.getDimensions();
       for (let x=0; x<width; x++) for (let y=0; y<height; y++) {
         if (!dontErase.includes(x+','+y)) display.draw(x, y, '');
       }
     } else {
       display.clear();
+    }
+    if (map && drawGridLines) {
+      const {width, height} = map.getDimensions();
+      for (let x=0; x<width; x++) for (let y=0; y<height; y++) {
+        if (!dontErase.includes(x+','+y)) {
+          if (x%2==0 && y%2==0) {
+            display .draw(x, y, '·', '#424242');
+          }
+        }
+      }
     }
     draw();
   };
@@ -486,7 +497,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
       }
     });
 
-    refresh();
+    refresh(false);
     const instructions = [];
     for (let x=1; x<mWidth-2; x++) instructions.push('RIGHT');
     const tempStack = [];
@@ -498,7 +509,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     const execOne = () => {
       const next = gen.next();
       map.placeObject(x++, startRow + asciiArt.length + 1, 'dash');
-      refresh();
+      refresh(false);
       if (next.done) {
         setTimeout(() => {
           $('#startButton').removeClass('hidden');
@@ -668,6 +679,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
     if (debugMode) enableKeyboardInput();
     display.getContainer().focus();
+    refresh();
   };
 
   const updateExecutionStepsIndicator = () => {
