@@ -24,9 +24,7 @@ const level0 = {
     '',
     'This window is the Editor. You can use it to write commands to control your character. Anything between a pair of "#"s will be ignored, so you can write comments if you like.',
     '',
-    'Your program has access to a list of integers called the "stack", which is initially empty.',
-    '',
-    'You can manipulate this stack using "commands" written in the Editor. If you click the "Run Code" button below, the commands will be executed one by one.',
+    'Your program has access to a list of integers called the "stack", which is initially empty. You can manipulate this stack using "commands" written in the Editor. If you click the "Run Code" button below, the commands will be executed one by one.',
     '',
     'Using these commands you can PUSH a one-digit value to the top of the stack, POP the top value off the stack, perform numeric operations like ADD or DIV, and execute conditional statements depending on the values in the stack. You can also define your own commands, but we\'ll get to that later.',
     '',
@@ -447,6 +445,7 @@ const level7 = {
   ],
 };
 
+
 /*
 const level = {
   grid: ``,
@@ -456,6 +455,8 @@ const level = {
   allFunctionsAvailable: false,
   availableFunctions: [
   ],
+  additionalFunctions: {
+  },
   objects: [
   ],
   comments: [
@@ -483,7 +484,19 @@ const levelData = [
 
 const levels = levelData.map(makeMapFuncFromData);
 
-function pickLevelMapFunc (game, debug, {collision}) {
+const introMapFunc = (game, debug) => {
+  const map = new Map(game, defaultWidth*2, defaultHeight-2);
+  game.loadFunctions([]);
+  game.setLevelName('');
+  map.defineNewObject({
+    name: 'dash',
+    getSymbol: () => '=',
+  });
+  return map;
+};
+
+
+function pickLevelMapFunc(game, debug, {collision}) {
   const levelNameFirstCol = 10;
   const levelNumberColumn = 5;
 
@@ -495,15 +508,10 @@ function pickLevelMapFunc (game, debug, {collision}) {
   map = new Map(game, width, height);
 
   paddingLines = Math.floor((height - numLevels) / (numLevels + 1));
-  const lineDelay = 200;
-  const charDelay = 20;
   game.loadFunctions(Object.keys(coreFunctions));
   game.setLevelName('');
 
   map.setPlayer(2, 2);
-
-  const linesToDraw = levelData.map((level, index) => {
-  });
 
   levelData.forEach((level, index) => {
     const lineNum = paddingLines + index * (paddingLines + 1);

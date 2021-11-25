@@ -91,7 +91,7 @@ Map.createFromGrid = (game, {
   const lines = grid.trim().split('\n');
   const gheight = lines.length;
   const gwidth = Math.max(...lines.map(line => line.length));
-  let functions;
+  let functions = [];
   if (allFunctionsAvailable || debug) {
     functions = Object.keys(coreFunctions);
   } else if (availableFunctions) {

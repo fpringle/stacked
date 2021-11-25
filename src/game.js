@@ -47,6 +47,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const flashDelay = 500;
   let comments = [];
   let executionSteps;
+  let dontErase = [];
 
   const setHardModeIndicator = () => {
     if (hardMode) {
@@ -86,9 +87,14 @@ function Game({debug, hard, firstLevel, allFuncs}) {
       }
       $('#levelButtons').show();
     }
-    reset;
-    loadMapFromLevelNum(levelNum);
-    this.initializeAfterMap({newMap: true, drawStyle:'random-slow'});
+    reset();
+    if (levelNum === -1) {
+      intro();
+    } else {
+      $('#startButtonDiv').hide();
+      loadMapFromLevelNum(levelNum);
+      this.initializeAfterMap({newMap: true, drawStyle:'random-slow'});
+    }
   };
 
   this.setLevelName = (name) => {
@@ -134,7 +140,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     categories.sort((a,b) => alphabetical(a[0], b[0]));
     $('#command-categories').empty();
     for (let [category, funcs] of categories) {
-      const categoryCap = category[0].toUpperCase() + category.substr(1).toLowerCase();
+      const categoryCap = category ? category[0].toUpperCase() + category.substr(1).toLowerCase() : '';
       const elem = $('<li/>').addClass('category');
       elem.append($('<div/>').addClass('category-title').text(categoryCap));
       const sublist = $('<ul/>').addClass('func-list');
@@ -164,12 +170,15 @@ function Game({debug, hard, firstLevel, allFuncs}) {
         }
       }
     }
-    const player = map.getPlayer();
-    const {x, y} = player.getXY();
-    const symbol = player.getSymbol ? player.getSymbol() : null;
-    const color = player.getColor ? player.getColor() : null;
-    const bgcolor = player.getBackgroundColor ? player.getBackgroundColor() : null;
-    chars.push([x, y, symbol, color, bgcolor]);
+    try {
+      const player = map.getPlayer();
+      const {x, y} = player.getXY();
+      const symbol = player.getSymbol ? player.getSymbol() : null;
+      const color = player.getColor ? player.getColor() : null;
+      const bgcolor = player.getBackgroundColor ? player.getBackgroundColor() : null;
+      chars.push([x, y, symbol, color, bgcolor]);
+    } catch {
+    }
     return chars;
   }
 
@@ -292,7 +301,14 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   const refresh = () => {
-    display.clear();
+    if (map && dontErase.length > 0) {
+      const {width, height} = map.getDimensions()
+      for (let x=0; x<width; x++) for (let y=0; y<height; y++) {
+        if (!dontErase.includes(x+','+y)) display.draw(x, y, '');
+      }
+    } else {
+      display.clear();
+    }
     draw();
   };
 
@@ -410,7 +426,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     if (levelNum + 1 < levels.length) {
       setTimeout(() => {
         $('#nextLevelButton').show();
-        flashHighlight($('#nextLevelButton'), 1);
+        flashHighlight($('#nextLevelButton'), 2);
       }, showNextLevelButtonDelay);
     } else if (!hasFinished) {
       hasFinished = true;
@@ -436,6 +452,72 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     writeStatus('Thanks for playing!');
     $('#pickLevelButton').show();
     $('#finishButton').hide();
+  };
+
+  const intro = () => {
+    reset();
+    editor.setValue('');
+    loadMap(introMapFunc);
+    $('#levelIndicator').text('Intro');
+    this.initializeAfterMap({newMap: false, drawStyle: 'normal'});
+    $('#editorPane').hide();
+    $('#referencePane').hide();
+    $('#belowScreen').hide();
+    const asciiArt = [
+      '   _____   _______               _____   _  __  ______   _____  ',
+      '  / ____| |__   __|     /\\      / ____| | |/ / |  ____| |  __ \\ ',
+      ' | (___      | |       /  \\    | |      | \' /  | |__    | |  | |',
+      '  \\___ \\     | |      / /\\ \\   | |      |  <   |  __|   | |  | |',
+      '  ____) |    | |     / ____ \\  | |____  | . \\  | |____  | |__| |',
+      ' |_____/     |_|    /_/    \\_\\  \\_____| |_|\\_\\ |______| |_____/ ',
+    ];
+    const width = Math.max(...asciiArt.map(l=>l.length));
+    const {width: mWidth, height: mHeight} = map.getDimensions();
+    const startCol = Math.floor((mWidth - width) / 2);
+    const startRow = Math.floor((mHeight - asciiArt.length) / 2) - 2;
+    asciiArt.forEach((line, idx) => {
+      display.drawText(startCol+line.search(/\S/), startRow+idx, line);
+      for (let x=startCol+line.search(/\S/); x<startCol+line.length; x++) {
+        dontErase.push(x + ',' + (startRow+idx));
+      }
+    });
+
+    refresh();
+    const instructions = [];
+    for (let x=1; x<mWidth-2; x++) instructions.push('RIGHT');
+    const tempStack = [];
+    const functions = {
+      RIGHT: coreFunctions.RIGHT,
+    };
+    const gen = interpret(this, instructions, tempStack, functions, false);
+    let x = 1;
+    const execOne = () => {
+      const next = gen.next();
+      map.placeObject(x++, startRow + asciiArt.length + 1, 'dash');
+      refresh();
+      if (next.done) {
+        setTimeout(() => {
+          $('#startButton').removeClass('hidden');
+          $('#startButton').css('visibility', 'visible');
+          $('#startButton').click(() => {
+            dontErase = [];
+            $('#startButtonDiv').hide();
+            $('#editorPane').show();
+            $('#referencePane').show();
+            $('#belowScreen').show();
+            reset();
+            loadMapFromLevelNum(0);
+            this.initializeAfterMap({newMap: true, drawStyle: 'random-slow'});
+          });
+        }, 750);
+        return;
+      }
+      setTimeout(execOne, 20);
+    };
+    setTimeout(() => {
+      map.setPlayer(1, startRow + asciiArt.length + 1);
+      execOne();
+    }, 500);
   };
 
   const pickLevel = () => {
