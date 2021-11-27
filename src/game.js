@@ -473,6 +473,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     $('#editorPane').hide();
     $('#referencePane').hide();
     $('#belowScreen').hide();
+    $('#levelButtons').hide();
     const asciiArt = [
       '   _____   _______               _____   _  __  ______   _____  ',
       '  / ____| |__   __|     /\\      / ____| | |/ / |  ____| |  __ \\ ',
