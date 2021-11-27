@@ -114,8 +114,7 @@ body {
 /* left pane */
 #editorPane {
   border: 0.125rem solid white;
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 0 0 33%;
 }
 
 #editorPane #buttons,#topButtons {
@@ -158,8 +157,7 @@ body {
   margin-right: 1.25rem;
   padding-bottom: 0.625rem;
   border: 0.125rem solid white;
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 0 0 33%;
 }
 
 #screen canvas {
@@ -242,8 +240,7 @@ canvas:focus {
 
 /* right pane */
 #referencePane {
-  flex-shrink: 1;
-  flex-grow: 1;
+  flex: 0 0 30%;
   border: 0.0625rem solid white;
   padding-left: 0.625rem;
   display: flex;
