@@ -17,7 +17,7 @@ const flashError = (message) => {
   }, 5000);
 };
 
-function Game({debug, hard, firstLevel, allFuncs}) {
+function Game({debug, firstLevel, allFuncs}) {
   let debugMode = debug;
   let stack = [];
   let functions = {};
@@ -28,7 +28,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   let playerCanMove;
   let levelCompleted = false;
   let levelName;
-  let hardMode = hard;   // in hard mode, each program run starts with a fresh map
   let levelNum = firstLevel || 0;
   let curBestLevel = levelNum;
   let refreshTimer;
@@ -38,7 +37,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const showNextLevelButtonDelay = 500;
   const showFinishButtonDelay = 500;
   const editorWidth = '100%';
-  const editorHeight = 500;
+  const editorHeight = 550;
   const drawRandomFastTime = 500;
   const drawRandomSlowTime = 1000;
   const newLevelNameClearDelay = 2500;
@@ -50,19 +49,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   let executionSteps;
   let dontErase = [];
 
-  const setHardModeIndicator = () => {
-    if (hardMode) {
-      $('#hardModeIndicator').text(String.fromCharCode(0x2713));
-    } else {
-      $('#hardModeIndicator').text('x');
-    }
-  }
-
-  const toggleHardMode = () => {
-    hardMode = !hardMode;
-    setHardModeIndicator();
-  };
-
   const handleError = (err) => {
     const message = err.message[0].toUpperCase() + err.message.substr(1);
     console.error('Error: ' + message);
@@ -70,7 +56,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   this.ready = () => {
-    setHardModeIndicator();
     initializeBeforeMap();
     if (debugMode) {
       $('#pickLevelButton').show()
@@ -363,20 +348,14 @@ function Game({debug, hard, firstLevel, allFuncs}) {
       execOne();
     };
 
-    const runAndCatch = () => {
+    reloadMap('normal');
+    setTimeout(() => {
       try {
         run();
       } catch (err) {
         handleError(err);
       }
-    };
-
-    if (hardMode) {
-      reloadMap('normal');
-      setTimeout(runAndCatch, executionDelay);
-    } else {
-      runAndCatch();
-    }
+    }, executionDelay);
   }
 
   this.loadFunctions = (availableFunctions) => {
@@ -532,10 +511,22 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     }, 500);
   };
 
+  const pickLevelCollision = (index) => {
+    return () => {
+      levelNum = index;
+      disableKeyboardInput();
+      writeStatus(`Loading level ${index}...`);
+      setTimeout(() => {
+        reset();
+        setupButtons();
+        loadMapFromLevelNum(index);
+        this.initializeAfterMap({newMap: true, drawStyle: 'random-fast'});
+      }, loadingLevelDelay);
+    }
+  };
+
   const pickLevel = () => {
     reset();
-    const oldHardMode = hardMode;
-    hardMode = false;
     editor.setValue('');
     $('#levelIndicator').text('Pick level');
     $('#resetButton').off('click');
@@ -544,26 +535,11 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     });
     //if (!debugMode) $('#pickLevelButton').hide();
 
-    const collision = (index) => {
-      return () => {
-        levelNum = index;
-        disableKeyboardInput();
-        hardMode = oldHardMode;
-        writeStatus(`Loading level ${index}...`);
-        setTimeout(() => {
-          reset();
-          setupButtons();
-          loadMapFromLevelNum(index);
-          this.initializeAfterMap({newMap: true, drawStyle: 'random-fast'});
-        }, loadingLevelDelay);
-      }
-    };
-
     reset();
-    loadMap(pickLevelMapFunc, {collision});
+    loadMap(pickLevelMapFunc, {collision: pickLevelCollision});
     this.initializeAfterMap({newMap: false, drawStyle: 'lines'});
     insertComments();
-    this.levelNum = -1;
+    levelNum = -1;
     enableKeyboardInput();
     playerCanMove = true;
     $('#screen canvas').focus();
@@ -571,7 +547,11 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
   const reloadMap = (drawStyle) => {
     reset();
-    loadMap(origMapFunc);
+    if (levelNum === -1) {
+      loadMap(origMapFunc, {collision: pickLevelCollision});
+    } else {
+      loadMap(origMapFunc);
+    }
     this.initializeAfterMap({newMap: false, drawStyle});
   };
 
@@ -595,9 +575,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
     });
     $('#pickLevelButton').click(() => {
       pickLevel();
-    });
-    $('#toggleHardModeButton').click(() => {
-      toggleHardMode();
     });
     $('#resetCodeButton').click(() => {
       editor.setValue('');
@@ -715,11 +692,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   };
 
   const loadMapFromLevelNum = (index, extraData) => {
-    if (curBestLevel < 6 && index < 6) {
-      $('#toggleHardModeButton').hide();
-    } else  {
-      $('#toggleHardModeButton').show();
-    }
     loadMap(levels[index], extraData);
     levelNum = index;
     $('#levelIndicator').text('Level ' + levelNum);

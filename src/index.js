@@ -14,7 +14,6 @@ $(document).ready(() => {
 
   const game = new Game({
 //    debug:true,
-//    hard:true,
     firstLevel,
 //    firstLevel: levels.length-1,
 //    allFuncs: true,

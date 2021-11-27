@@ -24,7 +24,7 @@ const level0 = {
     '',
     'This window is the Editor. You can use it to write commands to control your character. Anything between a pair of "#"s will be ignored, so you can write comments if you like.',
     '',
-    'Your program has access to a list of integers called the "stack", which is initially empty. You can manipulate this stack using "commands" written in the Editor. If you click the "Run Code" button below, the commands will be executed one by one.',
+    'Your program has access to a list of integers called the "stack", which is initially empty. You can manipulate this stack using "commands" written in the Editor. If you click the "Run Code" button below, the commands will be executed one by one. If you don\'t reach the exit, you can edit your program and try again - Hash will be automatically moved back to its initial location before the program starts.',
     '',
     'Using these commands you can PUSH a one-digit value to the top of the stack, POP the top value off the stack, perform numeric operations like ADD or DIV, and execute conditional statements depending on the values in the stack. You can also define your own commands, but we\'ll get to that later.',
     '',
@@ -384,8 +384,6 @@ const level6 = {
   ],
   comments: [
     'Even better than RIGHTN or DOWNN, maybe someone could define a generic function MOVEN that move Hash N times in the direction D, where N and D are the top 2 values on the stack...',
-    '',
-    'By the way - until now, you\'ve been playing in "easy mode". You can enter commands one at a time, and click the "Run program" button as many times as you want. However, if you want an extra challenge, you can click the button below to enable "hard mode". Each time you click "Run program", the map will be reset before the program executes. In other words, your program needs to be able to get Hash from its starting position to the exit without any intervention by you.',
   ],
 };
 
@@ -435,7 +433,7 @@ const level7 = {
   comments: [
     'Look - this map has a new type of block! The red X is a spike - it\'ll kill Hash if it tries to walk over it!',
     '',
-    'If you\'re playing in "hard mode", your program probably needs to be able to adapt depending on Hash\'s surroundings. Let\'s introduce some new commands to help Hash make it without relying on its all-powerful controller (you).',
+    'Now that the levels are getting more complicated, your program probably needs to be able to adapt depending on Hash\'s surroundings. Let\'s introduce some new commands to help Hash make it without relying on its all-powerful controller (you).',
     '',
     'The LOOK command tells you what\'s right next to you in a particular direction. First it pops a value off the stack - this is the direction Hash will look in (LOOK uses the same numbers to represent directions as MOVE). Then it pushes a new value to the stack depending on what type of object (if any) is in the space one block away from Hash in that direction.',
     ' 0: empty cell',
@@ -542,7 +540,7 @@ function pickLevelMapFunc(game, debug, {collision}) {
 
 pickLevelMapFunc.comments = [
   'Congratulations on finishing Stacked!',
-  'If you like, you can now pick any of the levels to play again. Simply navigate Hash to one of the blue level numbers to load that level. As a treat, for this level only you can use the arrow keys to move around. If you were playing in "easy mode" before, maybe you want to try your hand at "hard mode"!',
+  'If you like, you can now pick any of the levels to play again. Simply navigate Hash to one of the blue level numbers to load that level. As a treat, for this level only you can use the arrow keys to move around. If you fancy an extra challenge, why not try and try and optimise your solutions: at the bottom right of the map you\'ll see a counter indicating how many instructions the program has executed. See how low you can get that number when you reach the exit!',
   '',
   'Stacked was written by Freddy Pringle. To check out the GitHub repo, click the icon at the top right of the page. You\'re more than welcome to fork the repo, run the game locally, make changes or design your own levels, and submit merge requests.',
   '',
