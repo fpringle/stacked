@@ -248,7 +248,7 @@ canvas:focus {
 
 #commands {
   height: 45rem;
-/*  width: 40rem;*/
+  width: 100%;
 /*  flex: 1;*/
   overflow-y: auto;
   overflow-y: overlay;
