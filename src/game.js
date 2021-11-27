@@ -37,7 +37,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const levelCompleteClearDelay = 2500;
   const showNextLevelButtonDelay = 500;
   const showFinishButtonDelay = 500;
-  const editorWidth = 'auto';
+  const editorWidth = '100%';
   const editorHeight = 500;
   const drawRandomFastTime = 500;
   const drawRandomSlowTime = 1000;
