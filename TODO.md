@@ -1,10 +1,9 @@
 - fix some drawing bugs e.g. loading a level while a level is already loading
 - credits (similar to level picker, go to X to click link
 - remember user-defined commands, give the option to paste them into the editor
-- user can click on function definitons to insert into editor?
 - sounds
 - exit conditions - stack has to look a certain way?
 - obstacles that push to or pop from the stack
 - do something cooler on "finish" button
 - custom errors
-- add indicator above the editor tp display the current # of comands? could be like code golf...
+- add indicator above the editor to display the current # of comands? could be like code golf...

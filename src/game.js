@@ -37,7 +37,7 @@ function Game({debug, hard, firstLevel, allFuncs}) {
   const levelCompleteClearDelay = 2500;
   const showNextLevelButtonDelay = 500;
   const showFinishButtonDelay = 500;
-  const editorWidth = 600;
+  const editorWidth = 'auto';
   const editorHeight = 500;
   const drawRandomFastTime = 500;
   const drawRandomSlowTime = 1000;
@@ -661,13 +661,6 @@ function Game({debug, hard, firstLevel, allFuncs}) {
 
     }
 
-    if (debugMode) {
-      for (let i=0; i<levels.length; i++) {
-        $(`#level${i}Button`).removeClass('highlight');
-        if (i === levelNum) $(`#level${levelNum}Button`).addClass('highlight');
-      }
-    }
-
     const maxLevelAvailable = Math.max(0, debugMode ? levels.length - 1 : curBestLevel);
     $('#levelButtons').empty();
     for (let i=0; i<=maxLevelAvailable; i++) {
@@ -681,14 +674,23 @@ function Game({debug, hard, firstLevel, allFuncs}) {
         this.initializeAfterMap({newMap: true, drawStyle:'random-fast'});
       });
     }
+    for (let i=0; i<levels.length; i++) {
+      $(`#level${i}Button`).removeClass('highlight');
+      if (i === levelNum) $(`#level${levelNum}Button`).addClass('highlight');
+    }
+
 
     updateInfoPane();
     this.updateStackDisplay();
     playerCanMove = true;
     levelCompleted = false;
 
-    if (debugMode) enableKeyboardInput();
-    display.getContainer().focus();
+    if (debugMode) {
+      enableKeyboardInput();
+      display.getContainer().focus();
+    } else {
+      editor.focus();
+    }
     refresh();
   };
 

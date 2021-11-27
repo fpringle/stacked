@@ -12,126 +12,7 @@ body {
   margin:0;
 }
 
-#debugBanner {
-  background: red;
-  height: 3.125rem;
-  font-size: 1.875rem;
-  text-align: center;
-  padding-top: 0.625rem;
-}
-
-#errorBanner {
-  background: red;
-  height: 1.25rem;
-  font-size: 0.9375rem;
-  text-align: center;
-  padding-top: 0.3125rem;
-  color: white;
-}
-
-#panes {
-  display: flex;
-/*  flex-wrap: wrap;*/
-  align-items: center;
-  align-content: center;
-  justify-content: center;
-  padding-top: 6.25rem;
-  margin: 0.625rem;
- /* padding-left: 0.9375rem;*/
-}
-
-#container {
-  display: flex;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
-
-}
-
-.CodeMirror-linenumbers {
-  background: black;
-}
-
-#stackDisplay,#executionSteps {
-  color: white;
-  font-size: 0.875rem;
-  font-weight: bold;
-  display: table-cell;
-}
-
-#stackDisplay {
-  width: 21.875rem;
-}
-
-#executionSteps {
-  width: 12.5rem;
-}
-
-#screen canvas {
-  margin-bottom: 0.625rem;
-}
-
-#screenPane {
-  margin: 0.625rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  padding-bottom: 0.625rem;
-  border: 0.125rem solid white;
-  flex-grow: 1;
-  flex-shrink: 1;
-}
-
-canvas:focus {
-  outline: none;
-}
-
-#levelIndicator {
-  padding: 0.3125rem;
-}
-
-#editorPane {
-  border: 0.125rem solid white;
-  flex-grow: 1;
-  flex-shrink: 1;
-}
-
-#topButtons {
-  padding: 0.3125rem;
-  border-bottom: 0.0625rem solid white;
-}
-
-#buttons {
-  border-top: 0.0625rem solid white;
-  padding-top: 0.625rem;
-}
-
-#editorPane #buttons,#topButtons {
-  margin-top: 0.3125rem;
-  padding-left: 0.3125rem;
-  background: #000;
-  color: #fff;
-  padding-bottom: 0.625rem;
-}
-
-#screenPane #levelButtons {
-  margin-top: 0.3125rem;
-  padding: 0.4375rem;
-  background: #000;
-  color: #fff;
-}
-
-#levelButtons span {
-  margin-left: 0.3125rem;
-}
-
-#belowScreen {
-  display: table;
-  padding: 0.125rem;
-  table-layout: fixed;
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
-}
-
+/* header */
 #header {
   width: 100%;
   display: table;
@@ -169,43 +50,31 @@ canvas:focus {
   font-size: 0.9375rem;
 }
 
-.noselect {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+/* misc banners */
+#debugBanner {
+  background: red;
+  height: 3.125rem;
+  font-size: 1.875rem;
+  text-align: center;
+  padding-top: 0.625rem;
 }
 
-.keys {
-  border: 0.125rem solid white;
-  cursor: pointer;
-  padding: 0.1875rem;
-  font-size: 0.875rem;
+#clearCacheButton:hover {
+  color: red;
+  background: black;
+  border-color: black;
 }
 
-#topButtons .keys {
-  font-size: 0.8125rem;
+#errorBanner {
+  background: red;
+  height: 1.25rem;
+  font-size: 0.9375rem;
+  text-align: center;
+  padding-top: 0.3125rem;
+  color: white;
 }
 
-#editorPane #buttons a:hover, .highlight {
-  background: #fff;
-  color: #000;
-}
-
-#editorPane #topButtons a:hover, .highlight {
-  background: #fff;
-  color: #000;
-}
-
-#screenPane #levelButtons a:hover {
-  background: #fff;
-  color: #000;
-}
-
-#hardModeIndicator {
-  font-size: 1.25rem;
-}
-
+/* start screen */
 #startButtonDiv {
   padding-left: 0.0rem;
   padding-top: 0.3125rem;
@@ -225,49 +94,170 @@ canvas:focus {
   color: #000;
 }
 
+/* main layout */
+#container {
+  height: 100%;
+  width: 100%;
+}
+
+#panes {
+  display: flex;
+/*  flex-wrap: wrap;*/
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  padding-top: 6.25rem;
+  margin: 0.625rem;
+ /* padding-left: 0.9375rem;*/
+}
+
+/* left pane */
+#editorPane {
+  border: 0.125rem solid white;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+#editorPane #buttons,#topButtons {
+  margin-top: 0.3125rem;
+  padding-left: 0.3125rem;
+  background: #000;
+  color: #fff;
+  padding-bottom: 0.625rem;
+}
+
+#topButtons {
+  padding: 0.3125rem;
+  border-bottom: 0.0625rem solid white;
+}
+
+#buttons {
+  border-top: 0.0625rem solid white;
+  padding-top: 0.625rem;
+}
+
+#editorPane #buttons a:hover, .highlight {
+  background: #fff;
+  color: #000;
+}
+
+#editorPane #topButtons a:hover, .highlight {
+  background: #fff;
+  color: #000;
+}
+
+#hardModeIndicator {
+  font-size: 1.25rem;
+}
+
+
+/* middle pane */
+#screenPane {
+  margin: 0.625rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  padding-bottom: 0.625rem;
+  border: 0.125rem solid white;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+#screen canvas {
+  margin-bottom: 0.625rem;
+}
+
+canvas:focus {
+  outline: none;
+}
+
+.CodeMirror-linenumbers {
+  background: black;
+}
+
+#stackDisplay,#executionSteps {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+  display: table-cell;
+}
+
+#stackDisplay {
+  width: 21.875rem;
+}
+
+#executionSteps {
+  width: 12.5rem;
+}
+
+#levelIndicator {
+  padding: 0.3125rem;
+}
+
+#screenPane #levelButtons {
+  margin-top: 0.3125rem;
+  padding: 0.4375rem;
+  background: #000;
+  color: #fff;
+}
+
+#levelButtons span {
+  margin-left: 0.3125rem;
+}
+
+#belowScreen {
+  display: table;
+  padding: 0.125rem;
+  table-layout: fixed;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.noselect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.keys {
+  border: 0.125rem solid white;
+  cursor: pointer;
+  padding: 0.1875rem;
+  font-size: 0.875rem;
+}
+
+#topButtons .keys {
+  font-size: 0.8125rem;
+}
+
+#screenPane #levelButtons a:hover {
+  background: #fff;
+  color: #000;
+}
+
+.CodeMirror {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+/* right pane */
 #referencePane {
   flex-shrink: 1;
-/*  flex-grow: 1;*/
+  flex-grow: 1;
   border: 0.0625rem solid white;
   padding-left: 0.625rem;
+  display: flex;
 }
 
 #commands {
   height: 45rem;
-  width: 40rem;
+/*  width: 40rem;*/
+/*  flex: 1;*/
   overflow-y: auto;
   overflow-y: overlay;
   padding-right: 0.625rem;
   margin-top: 0.0rem;
   scrollbar-color: white black;
-}
-
-::-webkit-scrollbar {
-  width: 0.5rem;
-}
-
-::-webkit-scrollbar-track {
-  background: black;
-}
-
-::-moz-scrollbar-track {
-  background: black;
-}
-
-::-webkit-scrollbar-thumb {
-  background: white;
-}
-
-::-moz-scrollbar-thumb {
-  background: white;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #b2b2b2;
-}
-
-::-moz-scrollbar-thumb:hover {
-  background: #b2b2b2;
 }
 
 ul, li {
@@ -282,7 +272,7 @@ ul, li {
 
 .func-def {
   display: flex;
-  width: 36.25rem;
+/*  width: 36.25rem;*/
 }
 
 .func-desc {
@@ -336,13 +326,31 @@ ul, li {
   padding-bottom:0.3125rem;
 }
 
-.CodeMirror {
-  font-family: monospace;
-  font-weight: bold;
+/* misc */
+::-webkit-scrollbar {
+  width: 0.5rem;
 }
 
-#clearCacheButton:hover {
-  color: red;
+::-webkit-scrollbar-track {
   background: black;
-  border-color: black;
+}
+
+::-moz-scrollbar-track {
+  background: black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+}
+
+::-moz-scrollbar-thumb {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b2b2b2;
+}
+
+::-moz-scrollbar-thumb:hover {
+  background: #b2b2b2;
 }
