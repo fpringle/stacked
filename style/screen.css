@@ -127,6 +127,7 @@ body {
 
 #topButtons {
   padding: 0.3125rem;
+  padding-bottom: 0.7rem;
   border-bottom: 0.0625rem solid white;
 }
 

@@ -46,6 +46,7 @@ function Game({debug, firstLevel, allFuncs}) {
   const drawCharDelay = 20;
   const flashDelay = 500;
   let comments = [];
+  let hintLines = [];
   let executionSteps;
   let dontErase = [];
 
@@ -591,7 +592,7 @@ function Game({debug, firstLevel, allFuncs}) {
   };
 
   const insertComments = () => {
-    editor.setValue('#\n' + comments.join('\n') + '\n#\n\n');
+    editor.setValue('#\n' + comments.join('\n') + '\n#\n\n' + hintLines.join('\n'));
   };
 
   this.initializeAfterMap = ({newMap, drawStyle}) => {
@@ -631,7 +632,7 @@ function Game({debug, firstLevel, allFuncs}) {
         const x = (width - text.length) / 2;
         display.drawText(x, 1, text);
       }
-      if (comments.length > 0) {
+      if (comments.length > 0 || hintLines.length > 0) {
         insertComments();
       } else {
         editor.setValue('');
@@ -683,11 +684,13 @@ function Game({debug, firstLevel, allFuncs}) {
 
   const loadMap = (mapFunc, extraData) => {
     comments = [];
+    hintLines = [];
     executionSteps = 0;
     updateExecutionStepsIndicator();
     playerCanMove = false;
     origMapFunc = mapFunc;
     comments = mapFunc.comments || [];
+    hintLines = mapFunc.hintLines || [];
     map = mapFunc(this, allFuncs, extraData);
   };
 

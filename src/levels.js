@@ -84,11 +84,11 @@ const level2 = {
   grid: `
 @@@@@@@@@@@@@@
 @@@@@@@@@@@@@@
-@@          @@
+@@#         @@
 @@ @@@@@@@@ @@
 @@ @@@@@@@@ @@
-@@    @@    @@
-@@  # @@ o  @@
+@@ @@@@@@@@ @@
+@@         o@@
 @@@@@@@@@@@@@@
 @@@@@@@@@@@@@@
 `,
@@ -119,7 +119,14 @@ const level2 = {
     'DUP: duplicate the top value on the stack.  [1,2,3] => [1,2,3,3]',
     'SWAP: swap the top 2 values of the stack.   [1,2,3] => [1,3,2]',
     '',
+    'I\'ve given you 2 lines of a possible solution, just as a hint 🙂',
+    'Of course, feel free to ignore them if you want to do it a different way!',
+    '',
     'Note: the program doesn\'t care about whitespace or indentation, so feel free to space your commands out over multiple lines if it makes it easier to visualise the program execution.',
+  ],
+  hintLines: [
+    'PUSH 3 DUP DUP DUP   # stack is now [3,3,3,3] #',
+    'MOVE MOVE MOVE MOVE  # move downwards 4 times #',
   ],
 };
 
@@ -231,7 +238,15 @@ const level4 = {
     'END               - we end the function definition',
     'RIGHT2            - we call the function',
     '',
-    'A function defined with "DEF" can also call itself! For example, can you write your own function that moves right indefinitely?',
+    'A function defined with "DEF" can also call itself! For example, can you write your own function that moves right indefinitely? Don\'t worry about overshooting the goal - Hash will stop automatically once it gets there.',
+  ],
+  hintLines: [
+    'DEF RIGHTINF',
+    '             # do something here... #',
+    '  RIGHTINF   # and recurse! #',
+    'END',
+    '',
+    'RIGHTINF     # don\'t forget to call the function you define! #',
   ],
 };
 
@@ -312,7 +327,7 @@ const level5 = {
     '  CMD3   - if the value is 0, execute these commands',
     'END      - this is required',
     '',
-    'For example, by maintaining a "counter" value on the top of the stack, we can repeatedly execute a series of comands, perhaps modifying the count to halt when a certain condition is reached. Remember that the IF command will POP the value off the stack and discard it, so if you want to keep the value you\'ll have to use DUP first.',
+    'For example, by maintaining a "counter" value on the top of the stack, we can repeatedly execute a series of commands, perhaps modifying the count to halt when a certain condition is reached. Remember that the IF command will POP the value off the stack and discard it, so if you want to keep the value you\'ll have to use DUP first.',
     '',
     'Now you try it! I wonder if you can define functions RIGHTN and UPN that move Hash to the right/up N times, where N is the top value on the stack.',
   ],
@@ -466,6 +481,7 @@ const level = {
 const makeMapFuncFromData = (data) => {
   const mapFunc = (game, debug) => Map.createFromGrid(game, data, debug);
   mapFunc.comments = data.comments;
+  mapFunc.hintLines = data.hintLines;
   return mapFunc;
 };
 
