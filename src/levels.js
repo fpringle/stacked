@@ -458,6 +458,79 @@ const level7 = {
   ],
 };
 
+const level8 = {
+  grid: `
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@                     xxxxxx@
+@ #                        3@
+@                     xxxxx @
+@@@@@@@@@@@@@@@@@@@@@@@@@xx @
+@3                   4xx@xx @
+@ x@@@@@@@@@@@@@@@@@@ xx@xx @
+@2                 3@ xx@xx @
+@@@@@@@@@@@@@@@@@@x @ xx@xx @
+@3                 4@ xx@xx @
+@ x@@@@@@@@@@@@@@@@@@ xx@xx @
+@2                 3@ xx@xx @
+@@@@@@@@@@@@@@@@@@x @ xx@xx @
+@3                 4@ xxxxx @
+@ x@@@@@@@@@@@@@@@@@@ xxxxx @
+@ x@3             4x@1     4@
+@ x@ @@@@@@@@@@@@@ x@@@@@@@@@
+@ x@ @    @      @1        4@
+@ x@ @    @@@@@@@@@@@@@@@@x @
+@ x@ @ o                4@x @
+@ x@ @    @xxxxxxxxxxxxx @x @
+@ x@ @    @xxxxxxxxxxxxx @x @
+@ x@ @@@@@@xxxxxxxxxxxxx @x @
+@ x@2                   1@x @
+@ x@@@@@@@@@@@@@@@@@@@@@@@x @
+@2                         1@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+`,
+  levelName: 'Look out for yourself',
+  mapping: {
+    '@': 'block',
+    '#': 'player',
+    'o': 'exit',
+    'x': 'spike',
+    '0': 'push0',
+    '1': 'push1',
+    '2': 'push2',
+    '3': 'push3',
+    '4': 'push4',
+  },
+  allFunctionsAvailable: false,
+  availableFunctions: [
+    'MOVE',
+    'LEFT',
+    'UP',
+    'RIGHT',
+    'DOWN',
+    'WAIT',
+    'PUSH',
+    'DUP',
+    'POP',
+    'PUSH',
+    'SWAP',
+    'ROT3',
+    'ADD',
+    'MUL',
+    'SUB',
+    'DIV',
+    'MOD',
+    'RAND',
+    'DEF',
+    'IF',
+    'LOOK',
+  ],
+  objects: [
+  ],
+  comments: [
+    'When Hash meets a number on its journey, it\'ll eat it! The number will be pushed to the top of the stack. Depending on the situation, this might be exactly what you want, or you might have to get rid of it. I wonder how the numbers in this level were chosen...',
+  ],
+};
+
 
 /*
 const level = {
@@ -494,6 +567,7 @@ const levelData = [
   level5,
   level6,
   level7,
+  level8,
 ];
 
 const levels = levelData.map(makeMapFuncFromData);

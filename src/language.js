@@ -320,6 +320,7 @@ const coreFunctions = {
       else if (typeAt === 'block') pushValue = 1;
       else if (typeAt === 'exit') pushValue = 2;
       else if (typeAt === 'spike') pushValue = 3;
+      else if (typeAt.substr(0,4) === 'push') pushValue = 0;
       else throw new Error(`Unknown object type at (${nx},${ny}): ${typeAt}`);
       stack.push(pushValue);
     },

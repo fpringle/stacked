@@ -1,7 +1,3 @@
-const keywords = {
-  
-};
-
 CodeMirror.defineSimpleMode('stack', {
   start: [
     {regex: /(-?\d+)/, token: 'number'},

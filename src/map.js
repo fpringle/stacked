@@ -1,6 +1,30 @@
 const defaultWidth = 35;
 const defaultHeight = 34;
 
+const randColor = (function() {
+  let hue = 0; //Math.random();
+  const psi = 0.618033988749895;
+  const saturation = 0.5;
+  const value = 0.95;
+  return () => {
+    hue = (hue + psi) % 1;
+    const h = Math.floor(6 * hue);
+    const f = 6 * hue - h;
+    const p = value * (1 - saturation);
+    const q = value * (1 - f * saturation);
+    const t = value * (1 - (1 - f) * saturation);
+    const rgb = [
+      [value, t, p],
+      [q, value, p],
+      [p, value, t],
+      [p, q, value],
+      [t, p, value],
+      [value, p, q],
+    ][h].map(x => Math.floor(x * 0xFF));
+    return '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
+  };
+})();
+
 function Map(_game, width, height) {
   let game = _game;
   let player = null;
@@ -8,6 +32,11 @@ function Map(_game, width, height) {
   for (let row=0; row<height; row++) {
     map.push(Array(width));
   }
+
+  const removeObjectAt = (x, y) => {
+    if (!map[y][x]) throw new Error(`tried to call removeObjectAt bu there is no object at (${x},${y})`);
+    map[y][x] = null;
+  };
 
   this.getDimensions = () => ({width, height});
 
@@ -30,6 +59,20 @@ function Map(_game, width, height) {
       passable: () => true,
       onCollision: () => game.killPlayer(),
     },
+  };
+  for (let num=0; num<10; num++) {
+    const name = 'push' + num;
+    const color = randColor();
+    knownObjects[name] = {
+      name,
+      getSymbol: () => ''+num,
+      getColor: () => '#4d94ff',
+      passable: () => true,
+      onCollision: (me) => {
+        game.pushToStack(num);
+        removeObjectAt(me.x, me.y);
+      },
+    };
   };
 
   this.getObjectAt = (x, y) => {

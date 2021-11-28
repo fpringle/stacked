@@ -13,7 +13,7 @@ $(document).ready(() => {
   else firstLevel = -1;
 
   const game = new Game({
-//    debug:true,
+    debug:true,
     firstLevel,
 //    firstLevel: levels.length-1,
 //    allFuncs: true,

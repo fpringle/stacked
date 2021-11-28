@@ -273,8 +273,17 @@ function Game({debug, firstLevel, allFuncs}) {
     refresh();
     const {x, y} = player.getXY();
     const obj = map.getObjectAt(x, y);
-    if (obj && obj.onCollision) obj.onCollision(player);
+    if (obj && obj.onCollision) {
+      obj.x = x;
+      obj.y = y;
+      obj.onCollision(obj, player);
+    }
   }
+
+  this.pushToStack = (val) => {
+    stack.push(val);
+    this.updateStackDisplay();
+  };
 
   this.updateStackDisplay = () => {
     let shortenedStack = stack.slice();
