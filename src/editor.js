@@ -10,6 +10,13 @@ function Editor(width, height) {
     autofocus: true,
   });
 
+  internalEditor.setOption("extraKeys", {
+    Tab: function(cm) {
+      var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+      cm.replaceSelection(spaces);
+    }
+  });
+
   let copyStatusTimer;
 
   let clipboard = new ClipboardJS('#copyButton', {
