@@ -1,6 +1,8 @@
 # Stacked
 Browser-based programming game written in JavaScript
 
+Click [here](https://fpringle.github.io/stacked/) to play
+
 ## Credits
 
 For the concept and implementation of this project I drew inspiration heavily from 
