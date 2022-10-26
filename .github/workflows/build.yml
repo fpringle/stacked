@@ -27,7 +27,7 @@ jobs:
                   git config --local user.email "github-actions[bot]@users.noreply.github.com"
                   git config --local user.name "github-actions[bot]"
                   git add src/build/stacked.js
-                  git commit -m "Updated documentation"
+                  git commit -m "re-built stacked.js"
 
             - name: Push changes
               if: steps.changed_files.outputs.files_changed == 'true'
